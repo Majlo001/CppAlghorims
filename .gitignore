@@ -33,4 +33,5 @@
 
 
 #Visual Studio
-Debug\*
+Debug/
+.vs/

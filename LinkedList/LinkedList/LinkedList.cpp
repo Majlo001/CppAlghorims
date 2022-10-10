@@ -1,5 +1,20 @@
 ﻿#include <iostream>
 #include <string>
+#include <time.h>
+
+
+// ==== TODO:
+// (f) ustawienie (podmiana) danych i-tego elementu listy (argumenty: indeks i żądanego elementu
+// (numerując od zera) oraz nowe dane; wynik: pusty lub niepowodzenie w razie indeksu poza
+// zakresem)
+
+// (i) dodanie nowego elementu z wymuszeniem porządku (argumenty: dane i informacja lub kom-
+// parator definiujące klucz porządkowania)
+
+// linked_list<some_object*>* ll = new linked_list<some_object*>();
+// 6. clock()
+// 7. operator [], opcjonalnie
+// 8.
 
 
 //template<typename T>
@@ -137,11 +152,65 @@ public:
             }
         }
     }
-    void del_index() {
+    void del_index(int index) {
+        if (size == 0) {
+            std::cout << "Brak obiektów w tablicy!" << std::endl;
+            return;
+        }
+        else if (index > size-1) {
+            std::cout << "Brak obiektu o podanym indeksie!" << std::endl;
+            return;
+        }
+        else {
+            if (size == 1 && index == size-1) {
+                del_all();
+                return;
+            }
+            else if (index == 0) {
+                del_first();
+                return;
+            }
+            else if (index == size - 1) {
+                del_last();
+                return;
+            }
+            else if (index <= ((size - 1) / 2)) {
+                std::cout << "Used 1 " << size - 1 << " : " << (size - 1 / 2) << std::endl;
+                T* temp_object = head;
+                int i = 0;
+                
+                while (i != index){
+                    i++;
+                    temp_object = temp_object->next;
+                }
 
-        size--;
-    }
-    void index(int number) {
+                T* next_object = temp_object->next;
+                T* prev_object = temp_object->prev;
+                prev_object->next = temp_object->next;
+                next_object->prev = temp_object->prev;
+                
+                free(temp_object);
+            }
+            else {
+                T* temp_object = tail;
+                int i = size-1;
+
+                while (i != index) {
+                    i--;
+                    temp_object = temp_object->prev;
+                }
+
+                T* next_object = temp_object->next;
+                T* prev_object = temp_object->prev;
+                prev_object->next = temp_object->next;
+                next_object->prev = temp_object->prev;
+
+                free(temp_object);
+            }
+            size--;
+        }
+     }
+    void print_index(int number) {
         if (number <= size) {
             T* temp_object = head;
             int temp_index = 0;
@@ -175,7 +244,6 @@ public:
     }
 };
 
-
 int main()
 {
     //linked_list<Node<int>>* l1 = new linked_list<Node<int>>();
@@ -190,7 +258,6 @@ int main()
     Node so2;
     so2.number = 888;
     l1->add_last(so2);
-    l1->del_last();
 
     Node so3;
     so3.number = 777;
@@ -199,9 +266,11 @@ int main()
     so3.number = 1111;
     l1->add_first(so3);
 
-    l1->index(0);
-    l1->index(2);
-    l1->del_first();
+    l1->print_index(0);
+    l1->print_index(2);
+    l1->del_index(2);
+    l1->printAll();
+    l1->del_index(2);
 
     l1->printAll();
     l1->del_all();
