@@ -8,6 +8,13 @@
 // (numerując od zera) oraz nowe dane; wynik: pusty lub niepowodzenie w razie indeksu poza
 // zakresem)
 
+// (g) wyszukanie elementu (argumenty: dane wzorcowe oraz informacja lub komparator definiujące
+// klucz wyszukiwania — szczegółowe wskazówki dalej; wynik: wskaźnik na odnaleziony element
+// listy lub NULL w przypadku niepowodzenia)
+
+// (h)wyszukanie i usunięcie elementu(argumenty: jak wyżej; wynik: flaga logiczna sygnalizująca
+// powodzenie lub niepowodzenie)
+
 // (i) dodanie nowego elementu z wymuszeniem porządku (argumenty: dane i informacja lub kom-
 // parator definiujące klucz porządkowania)
 
@@ -17,28 +24,46 @@
 // 8.
 
 
-//template<typename T>
+class Person {
+public:
+    std::string pesel;
+    std::string imie;
+    std::string nazwisko;
+    int rok_urodzenia;
+
+    Person(std::string pesel, std::string imie, std::string nazwisko, int rok_urodzenia) {
+        this->pesel = pesel;
+        this->imie = imie;
+        this->nazwisko = nazwisko;
+        this->rok_urodzenia = rok_urodzenia;
+    }
+
+    std::ostream& operator<<(std::ostream& os)
+    {
+        os << '[' << imie << ' ' << nazwisko << ' ' << pesel << ' ' << rok_urodzenia << ']';
+        return os;
+    }
+};
+
+
+template<typename T>
 class Node {
 public:
-    //Node<T>* prev;
-    //Node<T>* next;
-    Node* prev;
-    Node* next;
-    int number;
-    //std::string phrase;
+    Node<T>* prev;
+    Node<T>* next;
+    T data;
 
     Node() {
         prev = nullptr;
         next = nullptr;
-        number = 0;
     }
 };
 
 template<typename T>
 class linked_list {
 private:
-    T* head;
-    T* tail;
+    Node<T>* head;
+    Node<T>* tail;
     int size;
 public:
     linked_list() {
@@ -47,23 +72,31 @@ public:
         size = 0;
     }
     void add_first(T dane) {
-        T* new_object = (T*)malloc(sizeof(T));
+        Node<T>* new_object = (Node<T>*)malloc(sizeof(Node<T>));
+        
+        //temp_head->prev = head;
 
-        if (size != 0) {
-            T* temp = head;
-            temp->prev = head;
+        if (size == 0) {
+            new_object->data = dane;
+            head = new_object;
+            new_object->next = nullptr;
+            new_object->prev = nullptr;
         }
-
-        new_object->number = dane.number;
-        new_object->next = head;
-        head = new_object;
-        head->prev = nullptr;
+        else {
+            Node<T>* temp_head = head;
+            head->prev = new_object;
+            new_object->data = dane;
+            new_object->next = temp_head;
+            new_object->prev = nullptr;
+            head = new_object;
+        }
         size++;
     }
+
+    //DO POPRAWY!
     void add_last(T dane) {
-        T* new_object = (T*)malloc(sizeof(T));
-        new_object->number = dane.number;
-        //new_object->phrase = dane.phrase;
+        Node<T>* new_object = (Node<T>*)malloc(sizeof(Node<T>));
+        new_object->data = dane;
         new_object->next = nullptr;
         new_object->prev = nullptr;
 
@@ -72,7 +105,7 @@ public:
             tail = new_object;
         }
         else {
-            T* temp_object = head;
+            Node<T>* temp_object = head;
             for (int i = 0; i < size; i++) {
                 if (temp_object->next == nullptr) {
                     temp_object->next = new_object; 
@@ -90,14 +123,14 @@ public:
             return;
         }
         else {
-            T* head_object = head;
+            Node<T>* head_object = head;
 
             if (size == 1) {
                 head = nullptr;
                 tail = nullptr;
             }
             else {
-                T* temp = head_object->next;
+                Node<T>* temp = head_object->next;
                 head = temp;
                 temp->prev = nullptr;
             }
@@ -113,14 +146,14 @@ public:
             return;
         }
         else{
-            T* tail_object = tail;
+            Node<T>* tail_object = tail;
 
             if (size == 1) {
                 head = nullptr;
                 tail = nullptr;
             }
             else {
-                T* temp = tail_object->prev;
+                Node<T>* temp = tail_object->prev;
                 tail = temp;
                 temp->next = nullptr;
             }
@@ -136,8 +169,8 @@ public:
             return;
         }
         else {
-            T* head_object = head;
-            T* temp_object;
+            Node<T>* head_object = head;
+            Node<T>* temp_object;
             head = nullptr;
             tail = nullptr;
 
@@ -175,8 +208,7 @@ public:
                 return;
             }
             else if (index <= ((size - 1) / 2)) {
-                std::cout << "Used 1 " << size - 1 << " : " << (size - 1 / 2) << std::endl;
-                T* temp_object = head;
+                Node<T>* temp_object = head;
                 int i = 0;
                 
                 while (i != index){
@@ -184,15 +216,15 @@ public:
                     temp_object = temp_object->next;
                 }
 
-                T* next_object = temp_object->next;
-                T* prev_object = temp_object->prev;
+                Node<T>* next_object = temp_object->next;
+                Node<T>* prev_object = temp_object->prev;
                 prev_object->next = temp_object->next;
                 next_object->prev = temp_object->prev;
                 
                 free(temp_object);
             }
             else {
-                T* temp_object = tail;
+                Node<T>* temp_object = tail;
                 int i = size-1;
 
                 while (i != index) {
@@ -200,8 +232,8 @@ public:
                     temp_object = temp_object->prev;
                 }
 
-                T* next_object = temp_object->next;
-                T* prev_object = temp_object->prev;
+                Node<T>* next_object = temp_object->next;
+                Node<T>* prev_object = temp_object->prev;
                 prev_object->next = temp_object->next;
                 next_object->prev = temp_object->prev;
 
@@ -212,12 +244,14 @@ public:
      }
     void print_index(int number) {
         if (number <= size) {
-            T* temp_object = head;
+            Node<T>* temp_object = head;
             int temp_index = 0;
 
+            /*if (index <= ((size - 1) / 2)) {
+            }*/
             for (int i = 0; i <= number; i++) {
                 if (temp_index == number) {
-                    std::cout << temp_index << " " << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << temp_object->number << std::endl;
+                    std::cout << temp_index << " " << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << temp_object->data << std::endl;
                     return;
                 }
                 temp_index++;
@@ -229,11 +263,11 @@ public:
         }
     }
     void printAll() {
-        T* temp_object = head;
+        Node<T>* temp_object = head;
         if (size != 0) {
             std::cout << std::endl << "<==== LISTA ====>" << std::endl;
             for (int i = 0; i < size; i++) {
-                std::cout << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << temp_object->number << std::endl;
+                std::cout << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << temp_object->data << std::endl;
                 temp_object = temp_object->next;
             }
             std::cout << std::endl;
@@ -246,25 +280,27 @@ public:
 
 int main()
 {
-    //linked_list<Node<int>>* l1 = new linked_list<Node<int>>();
-    //Node<int> so;
+    clock_t t1 = clock();
 
-    linked_list<Node>* l1 = new linked_list<Node>();
-    Node so1;
-    so1.number = 999;
-    //so1.phrase = 'work';
-    l1->add_first(so1);
 
-    Node so2;
-    so2.number = 888;
-    l1->add_last(so2);
+    linked_list<int>* l1 = new linked_list<int>();
+    linked_list<Person*>* l2 = new linked_list<Person*>();
 
-    Node so3;
-    so3.number = 777;
-    l1->add_last(so3);
+    Person* osoba = new Person("12345678910", "Adam", "Adamiak", 2001);
+    Person* osoba2 = new Person("12345786632", "Jan", "Kowalski", 1998);
+    l2->add_first(osoba);
+    l2->add_first(osoba2);
+    //l2->del_first();
 
-    so3.number = 1111;
-    l1->add_first(so3);
+    delete osoba;
+    delete osoba2;
+    l2->printAll();
+
+
+    l1->add_first(999);
+    l1->add_last(888);
+    l1->add_last(777);
+    l1->add_first(1111);
 
     l1->print_index(0);
     l1->print_index(2);
@@ -277,6 +313,14 @@ int main()
     l1->printAll();
 
 
+
+    delete l2;
     delete l1;
+
+
+
+    clock_t t2 = clock();
+    double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << time << std::endl;
     return 0;
 }
