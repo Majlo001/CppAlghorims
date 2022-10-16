@@ -2,7 +2,7 @@
 #include <string>
 #include <time.h>
 #include <typeinfo>
-#include <cassert>
+#include <sstream>
 
 
 // ==== TODO:
@@ -12,7 +12,7 @@
 
 // (g) wyszukanie elementu (argumenty: dane wzorcowe oraz informacja lub komparator definiujące
 // klucz wyszukiwania — szczegółowe wskazówki dalej; wynik: wskaźnik na odnaleziony element
-// listy lub NULL w przypadku niepowodzenia)
+// listy lub NULL w przypadku niepowodzenia) HALF DONE
 
 // (h)wyszukanie i usunięcie elementu(argumenty: jak wyżej; wynik: flaga logiczna sygnalizująca
 // powodzenie lub niepowodzenie)
@@ -22,9 +22,12 @@
 
 // linked_list<some_object>* ll = new linked_list<some_object>();
 // 6. clock() DONE
-// 7. operator [], opcjonalnie
-// 8.
-// 9. to_string()
+// 8. Operator <= itd. PRAWIE DONE
+// 9. to_string() PRAWIE DONE
+
+
+// Usunięcie wszystkich cout'ów i dodanie returnów
+// Try catche
 
 
 class Person {
@@ -52,11 +55,9 @@ public:
 bool operator<=(const Person& a, const Person& b) {
     return a.pesel < b.pesel || a.pesel == b.pesel;
 }
-
-// To nie działa
-//bool operator<=(const Person*& a, const Person*& b) {
-//    return a->pesel < b->pesel || a->pesel == b->pesel;
-//}
+bool operator==(const Person& a, const Person& b) {
+    return a.pesel == b.pesel;
+}
 
 
 std::string person_to_str(Person p) {
@@ -64,6 +65,22 @@ std::string person_to_str(Person p) {
 }
 std::string person_to_str(Person* p) {
     return p->imie + " " + p->nazwisko + " " + p->pesel + " " + std::to_string(p->rok_urodzenia);
+}
+
+
+// Do poprawy!
+template<typename T>
+std::string just_str(T just) {
+    std::string temp = "";
+
+    if (typeid(just).name() != typeid(temp).name()) {
+        
+        temp = std::to_string(just);
+    }
+    else {
+        temp = just;
+    }
+    return temp;
 }
 
 template<typename T>
@@ -110,7 +127,6 @@ public:
             head = new_object;
         }
         size++;
-        std::cout << person_to_str(new_object->data) << std::endl;
     }
 
     //Poprawione
@@ -328,12 +344,9 @@ public:
         Node<T>* temp_object = head;
         if (size != 0) {
             for (int i = 0; i < size; i++) {
-                //assert(temp_object->data <= dane);
-                //std::cout << dane.pesel << std::endl;
-                std::cout << person_to_str(temp_object->data) << std::endl;
 
-                if (*temp_object->data <= *dane) {
-                    std::cout << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << person_to_str(temp_object->data) << std::endl;
+                if (temp_object->data <= dane) {
+                    std::cout << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << temp_object->data << std::endl;
                     return;
                 }
                 else {
@@ -345,6 +358,58 @@ public:
         else {
             std::cout << "Brak rekordów" << std::endl;
         }
+    }
+    void print_by_key(T dane, bool isIndicator) {
+        Node<T>* temp_object = head;
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+
+                if (isIndicator == true) {
+                    if (*temp_object->data <= *dane) {
+                        std::cout << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << person_to_str(temp_object->data) << std::endl;
+                        return;
+                    }
+                    else {
+                        temp_object = temp_object->next;
+                    }
+                }
+                else {
+                    if (temp_object->data <= dane) {
+                        std::cout << temp_object << " " << temp_object->prev << " " << temp_object->next << " " << person_to_str(temp_object->data) << std::endl;
+                        return;
+                    }
+                    else {
+                        temp_object = temp_object->next;
+                    }
+                }
+            }
+            std::cout << std::endl;
+        }
+        else {
+            std::cout << "Brak rekordów" << std::endl;
+        }
+    }
+
+
+    // Do poprawy!
+    std::string to_string(std::string(*data_to_str)(T)) {
+        std::ostringstream temp;
+        Node<T>* temp_object = head;
+
+        while (temp_object) {
+            temp << temp_object << " ";
+            temp << temp_object->prev << " ";
+            temp << temp_object->next << " ";
+            if (data_to_str) {
+                temp << data_to_str(temp_object->data) << "\n";
+            }
+            /*else {
+                temp << std::to_string(temp_object->data) << "\n";
+            }*/
+            temp_object = temp_object->next;
+        }
+
+        return temp.str();
     }
 };
 
@@ -363,25 +428,26 @@ int main()
     Person* osoba3 = new Person("12345786632", "Nataniel", "Wegier", 1976);
     l2->add_first(osoba);
     l2->add_first(osoba2);
-    l2->print_by_key(osoba3);
+    //l2->print_by_key(osoba3, true);
     //l2->del_first();
     l2->printAll();
+    std::cout << "LISTA\n" << l2->to_string(person_to_str) << std::endl;
 
 
     //Do poprawy
-    //Person adamiak('m', "12345678910", "Adam", "Adamiak", 2001);
+    //Person adamiak("12345678910", "Adam", "Adamiak", 2000);
     Person adamiak;
     adamiak.pesel = "1234567890";
     adamiak.imie = "Adam";
     adamiak.nazwisko = "Adamiak";
     adamiak.rok_urodzenia = 2000;
     l3->add_first(adamiak);
-    //l3->print_by_key(adamiak);
+    //l3->print_by_key(adamiak, false);
     l3->printAll();
 
 
 
-    /*l1->add_first(999);
+    l1->add_first(999);
     l1->add_last(888);
     l1->add_last(777);
     l1->add_first(1111);
@@ -389,13 +455,17 @@ int main()
     l1->print_index(0);
     l1->print_index(2);
     l1->del_index(2);
-    l1->printAll();
+    //l1->printAll();
+    std::cout << "LISTA\n" << l1->to_string(just_str) << std::endl;
     l1->del_index(2);
     l1->change_index(10, 300);
 
-    l1->printAll();
+    //l1->printAll();
+    std::cout << "LISTA\n" << l1->to_string(just_str) << std::endl;
+    l1->print_by_key(300);
     l1->del_all();
-    l1->printAll();
+    std::cout << "LISTA\n" << l1->to_string(just_str) << std::endl;
+    //l1->printAll();
 
 
 
@@ -403,7 +473,8 @@ int main()
     l4->add_first("Adam");
     l4->add_last("Szczan");
     l4->add_first("Kruk");
-    l4->printAll();*/
+    //std::cout << "LISTA\n" << l4->to_string(just_str) << std::endl;
+    //l4->printAll();
 
     delete l4;
     delete l3;
