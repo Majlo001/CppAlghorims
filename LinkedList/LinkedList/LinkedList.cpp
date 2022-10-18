@@ -5,12 +5,6 @@
 #include <sstream>
 
 
-// ==== TODO:
-
-// Try catche
-// dodać zakomentowany przykładowy kod
-
-
 class Person {
 public:
     std::string pesel;
@@ -52,9 +46,24 @@ public:
     }
 };
 
-int person_is_equal() {
-    return 0;
+
+template<typename T>
+int normal_cmp(T a, T b) {
+    if (a == b) return 0;
+    else if (a < b) return -1;
+    else return 1;
 }
+int person_cmp(Person p1, Person p2) {
+    if (p1.pesel == p2.pesel) return 0;
+    else if (p1.pesel < p2.pesel) return -1;
+    else return 1;
+}
+int person_cmp(Person* p1, Person* p2) {
+    if (p1->pesel == p2->pesel) return 0;
+    else if (p1->pesel < p2->pesel) return -1;
+    else return 1;
+}
+
 
 std::string person_to_str(Person p) {
     return p.imie + " " + p.nazwisko + " " + p.pesel + " " + std::to_string(p.rok_urodzenia);
@@ -139,32 +148,32 @@ public:
         }
         size++;
     }
-
-    // Nie działa dla typów wskaźnikowych
-    void add_order(T dane) {
+    void add_order(T dane, int (*data_cmp)(T, T)) {
         Node<T>* temp_object = head;
 
-
         if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (dane <= temp_object->data) {
-                    if (i == 0) {
-                        add_first(dane);
+            if (data_cmp) {
+                for (int i = 0; i < size; i++) {
+                    int cmp = data_cmp(dane, temp_object->data);
+                    if (cmp == -1 || cmp == 0) {
+                        if (i == 0) {
+                            add_first(dane);
+                            return;
+                        }
+                        Node<T>* new_object = new Node<T>;
+
+                        new_object->data = dane;
+                        new_object->next = temp_object;
+                        new_object->prev = temp_object->prev;
+                        temp_object->prev->next = new_object;
+                        temp_object->prev = new_object;
                         return;
                     }
-                    Node<T>* new_object = new Node<T>;
-
-                    new_object->data = dane;
-                    new_object->next = temp_object;
-                    new_object->prev = temp_object->prev;
-                    temp_object->prev->next = new_object;
-                    temp_object->prev = new_object;
-                    return;
+                    temp_object = temp_object->next;
                 }
-                temp_object = temp_object->next;
+                add_last(dane);
+                return;
             }
-            add_last(dane);
-            return;
         }
         else {
             add_first(dane);
@@ -180,8 +189,16 @@ public:
             Node<T>* head_object = head;
 
             if (size == 1) {
+
+                /*if (isIndicator == true) {
+                    delete head_object->data;
+                }*/
+                delete head_object;
+
                 head = nullptr;
                 tail = nullptr;
+                size--;
+                return 1;
             }
             else {
                 Node<T>* temp = head_object->next;
@@ -301,26 +318,37 @@ public:
             return true;
         }
      }
-
-    // Nie działa dla typów wskaźnikowych
-    bool del_by_key(T dane, bool isIndicator) {
+    bool del_by_key(T dane, int (*data_cmp)(T, T), bool isIndicator) {
         Node<T>* temp_object = head;
         if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (temp_object->data == dane) {
-                    delete temp_object;
-                    /*if (isIndicator == true) {
-                        delete head_object->data;
-                    }*/
-                    return true;
+            if (data_cmp) {
+                for (int i = 0; i < size; i++) {
+                    int cmp = data_cmp(temp_object->data, dane);
+                    if (cmp == 0) {
+                        if (i == 0 && i == size - 1) {
+                            return del_all(isIndicator);
+                        }
+                        else if (i == 0) {
+                            return del_first(isIndicator);
+                        }
+                        else if (i == size - 1) {
+                            return del_last(isIndicator);
+                        }
+                        else {
+                            /*if (isIndicator == true) {
+                                delete head_object->data;
+                            }*/
+                            delete temp_object;
+                            size--;
+                            return true;
+                        }
+                    }
+                    temp_object = temp_object->next;
                 }
-                temp_object = temp_object->next;
             }
         }
         return false;
     }
-
-    // Nie działa dla typów wskaźnikowych
     std::string change_index(int index, T dane, bool isIndicator) {
         try {
             if (index <= size) {
@@ -354,21 +382,22 @@ public:
             return "Indeks poza wielkoscia!";
         }
     }
-
-    // Nie działa dla typów wskaźnikowych
-    std::string change_by_key(T pattern_data, T dane, bool isIndicator) {
+    std::string change_by_key(T pattern_data, T dane, int (*data_cmp)(T, T), bool isIndicator) {
         try {
             Node<T>* temp_object = head;
             if (size != 0) {
-                for (int i = 0; i < size; i++) {
-                    if (temp_object->data == pattern_data) {
-                        /*if (isIndicator == true) {
-                            delete temp_object->data;
-                        }*/
-                        temp_object->data = dane;
-                        return "";
+                if (data_cmp) {
+                    for (int i = 0; i < size; i++) {
+                        int cmp = data_cmp(temp_object->data, dane);
+                        if (cmp == 0) {
+                            /*if (isIndicator == true) {
+                                delete temp_object->data;
+                            }*/
+                            temp_object->data = dane;
+                            return "";
+                        }
+                        temp_object = temp_object->next;
                     }
-                    temp_object = temp_object->next;
                 }
             }
             else {
@@ -395,7 +424,7 @@ public:
                         if (data_to_str) {
                             temp << data_to_str(temp_object->data) << "\n";
                         }
-                        return;
+                        break;
                     }
                     temp_index++;
                     temp_object = temp_object->next;
@@ -415,7 +444,6 @@ public:
                     if (data_to_str) {
                         temp << data_to_str(temp_object->data) << "\n";
                     }
-                    return;
                 }
             }
         }
@@ -425,37 +453,46 @@ public:
 
         return temp.str();
     }
-
-    // Nie działa dla typów wskaźnikowych
-    Node<T>* find_by_key(T dane) {
+    Node<T>* find_by_key(T dane, int (*data_cmp)(T, T)) {
         Node<T>* temp_object = head;
         if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (temp_object->data == dane) {
-                    //std::cout << "Działa" << std::endl;
-                    return temp_object;
+            if (data_cmp) {
+                for (int i = 0; i < size; i++) {
+                    int cmp = data_cmp(temp_object->data, dane);
+                    if (cmp == 0) {
+                        return temp_object;
+                    }
+                    temp_object = temp_object->next;
                 }
-                temp_object = temp_object->next;
             }
         }
         return NULL;
     }
 
-
     std::string to_string(std::string(*data_to_str)(T)) {
         std::ostringstream temp;
-        Node<T>* temp_object = head;
+        try {
+            Node<T>* temp_object = head;
 
-        while (temp_object) {
-            temp << temp_object << " ";
-            temp << temp_object->prev << " ";
-            temp << temp_object->next << " ";
-            if (data_to_str) {
-                temp << data_to_str(temp_object->data) << "\n";
+            if (size != 0) {
+                while (temp_object) {
+                    temp << temp_object << " ";
+                    temp << temp_object->prev << " ";
+                    temp << temp_object->next << " ";
+                    if (data_to_str) {
+                        temp << data_to_str(temp_object->data) << "\n";
+                    }
+                    temp_object = temp_object->next;
+                }
+
             }
-            temp_object = temp_object->next;
+            else {
+                throw 1;
+            }
         }
-
+        catch (...) {
+            temp << "Brak rekordow!\n";
+        }
         return temp.str();
     }
 };
@@ -476,10 +513,11 @@ public:
 //    Person* osoba3 = new Person("12345786632", "Nataniel", "Wegier", 1976);
 //    l2->add_first(osoba);
 //    l2->add_first(osoba2);
-//    l2->find_by_key(osoba3);
-//    std::cout << "FIND: " << (bool)l2->find_by_key(osoba3) << std::endl;
-//    l2->del_by_key(osoba3);
-//    delete osoba3;
+//    std::cout << "FIND: " << (bool)l2->find_by_key(osoba3, person_cmp) << std::endl;
+//    std::cout << "LISTA\n" << l2->to_string(person_to_str) << std::endl;
+//    std::cout << l2->change_by_key(osoba, osoba3, person_cmp, true) << std::endl;
+//    std::cout << "LISTA\n" << l2->to_string(person_to_str) << std::endl;
+//    l2->del_by_key(osoba3, person_cmp, true);
 //    std::cout << "LISTA\n" << l2->to_string(person_to_str) << std::endl;
 //    l2->del_first(true);
 //
@@ -490,7 +528,6 @@ public:
 //    adamiak.nazwisko = "Adamiak";
 //    adamiak.rok_urodzenia = 2000;
 //
-//
 //    Person adamiak2;
 //    adamiak2.pesel = "1234567890";
 //    adamiak2.imie = "Piotr";
@@ -499,31 +536,29 @@ public:
 //
 //    l3->add_first(adamiak);
 //    std::cout << "\nLISTA\n" << l3->to_string(person_to_str) << std::endl;
-//    l3->find_by_key(adamiak2);
-//    std::cout << l3->change_by_key(adamiak, adamiak2, false) << std::endl;
+//    l3->find_by_key(adamiak2, person_cmp);
+//    l3->add_first(adamiak);
+//    std::cout << l3->change_by_key(adamiak, adamiak2, person_cmp, false) << std::endl;
 //    std::cout << "\nLISTA\n" << l3->to_string(person_to_str) << std::endl;
 //
 //
 //
-//    /*l1->add_first(763);
-//    l1->add_first(873);
-//    l1->add_first(545);*/
-//    l1->add_order(999);
-//    l1->add_order(888);
-//    l1->add_order(777);
-//    l1->add_order(885);
-//    l1->add_order(1111);
+//    l1->add_order(999, normal_cmp);
+//    l1->add_order(888, normal_cmp);
+//    l1->add_order(777, normal_cmp);
+//    l1->add_order(885, normal_cmp);
+//    l1->add_order(1111, normal_cmp);
 //    std::cout << "LISTA ORDER\n" << l1->to_string(not_str) << std::endl;
 //
-//    l1->print_index(0);
-//    l1->print_index(2);
+//    l1->print_index(0, not_str);
+//    l1->print_index(2, not_str);
 //    l1->del_index(2, false);
 //    std::cout << "LISTA\n" << l1->to_string(not_str) << std::endl;
 //    l1->del_index(2, false);
 //    std::cout << l1->change_index(10, 300, false) << std::endl;
 //
 //    std::cout << "LISTA\n" << l1->to_string(not_str) << std::endl;
-//    l1->find_by_key(999);
+//    l1->find_by_key(999, normal_cmp);
 //    l1->del_all(false);
 //    std::cout << "LISTA\n" << l1->to_string(not_str) << std::endl;
 //
@@ -533,7 +568,7 @@ public:
 //    l4->add_first("Adam");
 //    l4->add_last("Szczaw");
 //    l4->add_first("Kruk");
-//    l4->find_by_key("Szczaw");
+//    l4->find_by_key("Szczaw", normal_cmp);
 //    std::cout << "LISTA\n" << l4->to_string(just_str) << std::endl;
 //
 //    delete l4;
@@ -549,8 +584,8 @@ public:
 
 // MAIN NEW
 int main() {
-    const int MAX_ORDER = 4;
-    linked_list<Person>* l1 = new linked_list<Person>();
+    const int MAX_ORDER = 7;
+    linked_list<Person*>* l1 = new linked_list<Person*>();
     for (int o = 1; o <= MAX_ORDER; o++)
     {
         const int n = pow(10, o);
@@ -561,7 +596,7 @@ int main() {
         clock_t t1 = clock();
         for (int i = 0; i < n; i++) {
             long int pesel = 12345678900+i;
-            Person osoba(std::to_string(pesel), "Adam", "Adamiak", 1900+i);
+            Person* osoba = new Person(std::to_string(pesel), "Adam", "Adamiak", 1900+i);
             l1->add_first(osoba);
         }
         clock_t t2 = clock();
@@ -576,10 +611,10 @@ int main() {
         t1 = clock();
         for (int i = 0; i < m; i++) {
             long int pesel = 12345678900 + i;
-            
-            Person osoba2(std::to_string(pesel), "Adam", "Adamiak", 1900 + i);
-            l1->find_by_key(osoba2);
-            //delete osoba2;
+
+            Person* osoba2 = new Person(std::to_string(pesel), "Adam", "Adamiak", 1900 + i);
+            l1->find_by_key(osoba2, person_cmp);
+            delete osoba2;
         }
         t2 = clock();
         //std::cout << "LISTA L1:\n" << l1->to_string(person_to_str) << std::endl;
