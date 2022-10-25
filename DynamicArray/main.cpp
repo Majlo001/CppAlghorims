@@ -250,12 +250,12 @@ int main() {
         da->add(new Person(std::to_string(pesel), "Adam", "Adamiak", 1000+i));
 
         clock_t t2_element = clock();
-        double time_per_element = ((t2_element - t1_element)/(double)CLOCKS_PER_SEC)/n;
+        double time_per_element = (t2_element - t1_element)/(double)CLOCKS_PER_SEC;
         
         if (time_per_element > max_time_per_element){
             max_time_per_element = time_per_element;
 
-            std::cout << "Nowy najgorszy czas na element: " << max_time_per_element * 1000 * 1000 * 1000 << "ns i jego indeks: " << i << std::endl;
+            std::cout << "Nowy najgorszy czas na element: " << max_time_per_element * 1000 << "ms i jego indeks: " << i << std::endl;
         }
     }
     clock_t t2 = clock();
@@ -264,6 +264,7 @@ int main() {
     std::cout << da->to_string(person_to_str, 10) << std::endl;
     std::cout << "Pomiar czasowy: " << time << "s dla 10^" << order << " elementow." <<  std::endl;
     //Tutaj czas zamortyzowany.
+
 
     da->clear(true);
     delete da;
