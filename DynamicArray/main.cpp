@@ -69,6 +69,11 @@ public:
         size = 0;
         capacity = 1;
     }
+    ~dynamic_array() {
+        size = 0;
+        capacity = 1;
+        delete[] dArray;
+    }
 
     T operator [](size_t liczba) {
         if (liczba < size) {
@@ -120,7 +125,11 @@ public:
         return 0;
     }
     void clear() {
-        delete[] dArray;
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                dArray[i] = nullptr;
+            }
+        }
         size = 0;
     }
     void clear(bool isPointer) {
@@ -128,11 +137,10 @@ public:
             if (size > 0) {
                 for (int i = 0; i < size; i++) {
                     delete dArray[i];
+                    dArray[i] = nullptr;
                 }
             }
         }
-
-        delete[] dArray;
         size = 0;
     }
 
@@ -168,6 +176,24 @@ public:
         }
     }
 
+    std::string show_index(std::string(*data_to_str)(T), int indeks) {
+        std::ostringstream os;
+        if (size != 0) {
+            if (indeks < size - 1) {
+                if (data_to_str) {
+                    os << data_to_str(dArray[indeks]) << "\n";
+                }
+            }
+            else {
+                os << "Indeks poza zakresem!\n";
+            }
+        }
+        else {
+            os << "Brak rekordow!\n";
+        }
+        return os.str();
+    }
+
     std::string to_string(std::string(*data_to_str)(T)) {
         std::ostringstream os;
         try {
@@ -185,50 +211,61 @@ public:
         }
         return os.str();
     }
+    std::string to_string(std::string(*data_to_str)(T), int count) {
+        std::ostringstream os;
+        try {
+            if (size != 0) {
+                if (count > size) {
+                    count = size;
+                }
+                for (int i = 0; i < count; i++) {
+                    if (data_to_str) {
+                        os << data_to_str(dArray[i]) << "\n";
+                    }
+                }
+            }
+            else throw 1;
+        }
+        catch (...) {
+            os << "Brak rekordow!\n";
+        }
+        return os.str();
+    }
 };
 
 
 
 int main() {
-    dynamic_array<std::string> da;
+    dynamic_array<Person*>* da = new dynamic_array<Person*>();
+    const int order = 7;
+    const int n = pow(10, order);
 
-    da.add("Adam");
-    da.add("Piter");
-    da.add("Wawrzyn");
-    da.add("Król");
-    da.add("Wroobelek");
-    da.add("AAA");
+    clock_t t1 = clock();
+    double max_time_per_element = 0.0;
 
-    std::cout << da.to_string(just_str) << std::endl;
-    da.bubbleSort();
-    std::cout << da.to_string(just_str) << std::endl;
+    for (int i = 0; i < n; i++) {
+        clock_t t1_element = clock();
 
-    std::cout << da.getSize() << std::endl;
-    std::cout << da.getCapacity() << std::endl;
-    
-    da.clear();
+        int pesel = rand() % 1000000 + 1;
+        da->add(new Person(std::to_string(pesel), "Adam", "Adamiak", 1000+i));
 
+        clock_t t2_element = clock();
+        double time_per_element = ((t2_element - t1_element)/(double)CLOCKS_PER_SEC)/n;
+        
+        if (time_per_element > max_time_per_element){
+            max_time_per_element = time_per_element;
 
-    dynamic_array<Person*> daPerson;
-    daPerson.add(new Person("12345678910", "Adam", "Adamiak", 2001));
-    daPerson.add(new Person("12434737744", "Szymon", "Adamiak", 1976));
-    daPerson.add(new Person("03747383333", "Kazimierz", "Adamiak", 1953));
-    daPerson.add(new Person("27348489933", "Karol", "Adamiak", 1998));
-    daPerson.add(new Person("57282929292", "Wiktor", "Adamiak", 2016));
-    daPerson.add(new Person("00274878389", "Jan", "Adamiak", 2000));
+            std::cout << "Nowy najgorszy czas na element: " << max_time_per_element * 1000 * 1000 * 1000 << "ns i jego indeks: " << i << std::endl;
+        }
+    }
+    clock_t t2 = clock();
+    double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 
-    std::cout << daPerson.to_string(person_to_str) << std::endl;
-    daPerson.bubbleSort(person_cmp);
-    std::cout << daPerson.to_string(person_to_str) << std::endl;
-    daPerson.change(2, new Person("19327373739", "Krzysztof", "Marian", 1944), true);
-    std::cout << daPerson.to_string(person_to_str) << std::endl;
+    std::cout << da->to_string(person_to_str, 10) << std::endl;
+    std::cout << "Pomiar czasowy: " << time << "s dla 10^" << order << " elementow." <<  std::endl;
+    //Tutaj czas zamortyzowany.
 
-
-    std::cout << daPerson.getSize() << std::endl;
-    std::cout << daPerson.getCapacity() << std::endl;
-
-    daPerson.clear(true);
-
-
+    da->clear(true);
+    delete da;
     return 0;
 }
