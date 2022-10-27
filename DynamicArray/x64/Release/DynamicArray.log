@@ -1,21 +1,21 @@
 ﻿  main.cpp
-Z:\ZUT_Algorithms2\DynamicArray\main.cpp(241,22): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\DynamicArray\main.cpp(241,17): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-Z:\ZUT_Algorithms2\DynamicArray\main.cpp(219,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\DynamicArray\main.cpp(214): message : while compiling class template member function 'std::string dynamic_array<Person *>::to_string(std::string (__cdecl *)(T),int)'
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\DynamicArray\main.cpp(247,22): warning C4244: "inicjowanie": konwersja z "double" do "int", możliwa utrata danych
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\DynamicArray\main.cpp(247,17): warning C4244: "inicjowanie": konwersja z "double" do "const int", możliwa utrata danych
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\DynamicArray\main.cpp(225,1): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\DynamicArray\main.cpp(220): message : podczas kompilowania funkcji składowej „std::string dynamic_array<Person *>::to_string(std::string (__cdecl *)(T),int)” klasy klasa szablon
           with
           [
               T=Person *
           ]
-Z:\ZUT_Algorithms2\DynamicArray\main.cpp(264): message : see reference to function template instantiation 'std::string dynamic_array<Person *>::to_string(std::string (__cdecl *)(T),int)' being compiled
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\DynamicArray\main.cpp(270): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::string dynamic_array<Person *>::to_string(std::string (__cdecl *)(T),int)” funkcji szablon
           with
           [
               T=Person *
           ]
-Z:\ZUT_Algorithms2\DynamicArray\main.cpp(239): message : see reference to class template instantiation 'dynamic_array<Person *>' being compiled
-  Generating code
-  1 of 170 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\DynamicArray\main.cpp(245): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „dynamic_array<Person *>” klasy klasa szablon
+  Trwa generowanie kodu
+  2 of 170 functions ( 1.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  DynamicArray.vcxproj -> Z:\ZUT_Algorithms2\x64\Release\DynamicArray.exe
+  Zakończono generowanie kodu
+  DynamicArray.vcxproj -> C:\Users\sm51115\source\repos\ZUT_Algorithms2\x64\Release\DynamicArray.exe

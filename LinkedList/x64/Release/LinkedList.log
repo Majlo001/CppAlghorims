@@ -1,13 +1,1 @@
-﻿  LinkedList.cpp
-Z:\ZUT_Algorithms2\LinkedList\LinkedList\LinkedList.cpp(596,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\LinkedList\LinkedList\LinkedList.cpp(596,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-Z:\ZUT_Algorithms2\LinkedList\LinkedList\LinkedList.cpp(603,28): warning C4244: 'initializing': conversion from '__int64' to 'long', possible loss of data
-Z:\ZUT_Algorithms2\LinkedList\LinkedList\LinkedList.cpp(615,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\LinkedList\LinkedList\LinkedList.cpp(615,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-Z:\ZUT_Algorithms2\LinkedList\LinkedList\LinkedList.cpp(618,28): warning C4244: 'initializing': conversion from '__int64' to 'long', possible loss of data
-  Generating code
-  6 of 115 functions ( 5.2%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  LinkedList.vcxproj -> Z:\ZUT_Algorithms2\LinkedList\x64\Release\LinkedList.exe
+﻿  LinkedList.vcxproj -> C:\Users\sm51115\source\repos\ZUT_Algorithms2\x64\Release\LinkedList.exe

@@ -21,7 +21,7 @@ public:
         pesel = "";
         imie = "";
         nazwisko = "";
-        rok_urodzenia = NULL;
+        rok_urodzenia = 0;
     }
 
     std::ostream& operator<<(std::ostream& os)
@@ -67,12 +67,12 @@ private:
 public:
     dynamic_array() {
         size = 0;
-        capacity = 1;
+        capacity = 0;
     }
     ~dynamic_array() {
         size = 0;
-        capacity = 1;
-        delete[] dArray;
+        capacity = 0;
+        //delete[] dArray;
     }
 
     T operator [](size_t liczba) {
@@ -98,8 +98,10 @@ public:
         dArray = temp_array;
     }
     void add(T data) {
-        if (size == 0) {
+        if (size == 0 && capacity == 0) {
+            capacity = 1;
             dArray = new T[capacity];
+            return;
         }
         if (size == capacity) {
             resize();
@@ -114,6 +116,14 @@ public:
         }
         return 0;
     }
+
+    T get_index(size_t indeks) {
+        if (size != 0) {
+            if (indeks < size - 1) {
+                return dArray[indeks];
+            }
+        }
+    }
     bool change(size_t indeks, T data, bool isPointer) {
         if (indeks < size - 1 && size != 0) {
             if (isPointer == true) {
@@ -127,21 +137,25 @@ public:
     void clear() {
         if (size > 0) {
             for (int i = 0; i < size; i++) {
-                dArray[i] = nullptr;
+                dArray[i].~T();
             }
         }
         size = 0;
+        capacity = 1;
+        delete[] dArray;
     }
     void clear(bool isPointer) {
         if (isPointer == true) {
             if (size > 0) {
                 for (int i = 0; i < size; i++) {
+                    dArray[i].~T();
                     delete dArray[i];
-                    dArray[i] = nullptr;
                 }
             }
         }
         size = 0;
+        capacity = 1;
+        delete[] dArray;
     }
 
     void bubbleSort(int(*data_cmp)(T,T)) {
@@ -237,7 +251,7 @@ public:
 
 int main() {
     dynamic_array<Person*>* da = new dynamic_array<Person*>();
-    const int order = 7;
+    const int order = 6;
     const int n = pow(10, order);
 
     clock_t t1 = clock();
@@ -263,6 +277,7 @@ int main() {
 
     std::cout << da->to_string(person_to_str, 10) << std::endl;
     std::cout << "Pomiar czasowy: " << time << "s dla 10^" << order << " elementow." <<  std::endl;
+    std::cout << "Czas zamortyzowany: " << (time/n)*1000*1000*1000 << " ns" << std::endl;
     //Tutaj czas zamortyzowany.
 
 
