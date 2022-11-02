@@ -1,0 +1,7 @@
+﻿  main.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+Z:\ZUT_Algorithms2\BinarySearchProject\main.cpp(164): warning C4715: 'bst<int>::find': not all control paths return a value
+  All 142 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(1074,5): error MSB6006: "link.exe" exited with code 128.
