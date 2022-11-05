@@ -72,6 +72,55 @@ int setIndeks() {
     return counter;
 }
 
+/* ==== LISTA ==== */
+template<typename T>
+class ListNode {
+public:
+    ListNode<T>* next;
+    T data;
+
+    ListNode() {
+        next = NULL;
+    }
+    ~ListNode() {
+        next = NULL;
+    }
+};
+template<typename T>
+class List {
+private:
+    ListNode<T>* head;
+    ListNode<T>* tail;
+    int size;
+public:
+    List() {
+        head = NULL;
+        tail = NULL;
+        size = 0;
+    }
+    void add(T dane) {
+        ListNode<T>* new_object = new ListNode<T>;
+        new_object->data = dane;
+        new_object->next = NULL;
+        new_object->prev = NULL;
+
+        if (size == 0) {
+            head = new_object;
+            tail = new_object;
+        }
+        else {
+            ListNode<T>* temp_object = tail;
+            temp_object->next = new_object;
+            new_object->prev = temp_object;
+            tail = new_object;
+        }
+        size++;
+    }
+};
+
+
+
+
 template<typename T>
 class Node {
 public:
@@ -88,6 +137,7 @@ public:
         indeks = setIndeks();
     }
     ~Node() {
+        data = ~T();
         parent = NULL;
         l_node = NULL;
         r_node = NULL;
@@ -97,12 +147,12 @@ public:
 
 
 template<typename T>
-class bst {
+class Bst {
 private:
     Node<T>* root;
     int size;
 public:
-    bst() {
+    Bst() {
         root = NULL;
         size = 0;
     }
@@ -176,40 +226,80 @@ public:
 
     //Zrobić dla isIndicator'a
     void remove(Node<T>* temp_object) {
-        Node<T>* parent_object;
-        if (temp_object->parent != NULL) {
-            parent_object = temp_object->parent;
-        }
+        Node<T>* parent_object = temp_object->parent;
 
         if (temp_object->l_node == NULL && temp_object->r_node == NULL) {
-            /*if (temp_object->parent != NULL) {
-                if (parent_object->l_node == temp_object) {
-                    parent_object->l_node = NULL
+            if (temp_object->parent != NULL) {
+                if (temp_object->parent->l_node == temp_object) {
+                    temp_object->parent->l_node = NULL;
                 }
                 else {
-                    parent_object->r_node = NULL
+                    temp_object->parent->r_node = NULL;
                 }
-            }*/
-            temp_object.~T();
+            }
+
+            temp_object->~Node();
             temp_object = NULL;
             return;
         }
         if (temp_object->l_node == NULL || temp_object->r_node == NULL) {
             if (temp_object->l_node != NULL) {
                 temp_object->l_node->parent = temp_object->parent;
-                //Tutaj podmiana u parent'a
             }
             else {
                 temp_object->r_node->parent = temp_object->parent;
-                //Tutaj podmiana u parent'a
             }
-            temp_object.~T();
+
+            if (temp_object->parent->l_node == temp_object) {
+                if (temp_object->l_node != NULL) {
+                    temp_object->parent->l_node = temp_object->l_node;
+                }
+                else {
+                    temp_object->parent->l_node = temp_object->r_node;
+                }
+            }
+            else {
+                if (temp_object->l_node != NULL) {
+                    temp_object->parent->r_node = temp_object->l_node;
+                }
+                else {
+                    temp_object->parent->r_node = temp_object->r_node;
+                }
+            }
+
+            temp_object->~Node();
             temp_object = NULL;
             return;
         }
 
         //Tutaj usuwanie pełnego liścia z wyszukaniem zastępcy
         Node<T>* succesor = findSuccessor(temp_object->l_node);
+        if (succesor != NULL) {
+            succesor->parent->r_node = succesor->l_node;
+            succesor->l_node->parent = succesor->parent;
+            succesor->l_node = NULL;
+
+            succesor->l_node = temp_object->l_node;
+            succesor->r_node = temp_object->r_node;
+            succesor->parent = temp_object->parent;
+            if (succesor->l_node != NULL) {
+                succesor->l_node->parent = succesor;
+            }
+            if (succesor->r_node != NULL) {
+                succesor->r_node->parent = succesor;
+            }
+            if (succesor->parent != NULL) {
+                if (temp_object->parent->r_node == temp_object) {
+                    succesor->parent->r_node = succesor;
+                }
+                else {
+                    succesor->parent->l_node = succesor;
+                }
+            }
+        }
+
+        temp_object->~Node();
+        temp_object = NULL;
         return;
     }
     Node<T>* findSuccessor(Node<T>* temp_object) {
@@ -282,7 +372,7 @@ public:
             clear(temp_object->r_node);
         }
         if (temp_object->l_node == NULL && temp_object->r_node == NULL) {
-            temp_object.~T(); 
+            temp_object->~Node();
         }
 
         size--;
@@ -295,7 +385,7 @@ public:
             clear(temp_object->r_node);
         }
         if (temp_object->l_node == NULL && temp_object->r_node == NULL) {
-            temp_object.~T();
+            temp_object->~Node();
             if (isIndicator == true) {
                 delete temp_object;
             }
@@ -316,7 +406,7 @@ public:
                     temp << temp_object->l_node->data;
                 }
                 else {
-                    temp << " NULL";
+                    temp << "NULL";
                 }
                 if (temp_object->r_node != NULL) {
                     temp << " r: " << data_to_str(temp_object->r_node->data) << "]\n";
@@ -389,21 +479,32 @@ public:
 
 int main()
 {
-    bst<int>* bst1 = new bst<int>();
+    Bst<int>* bst1 = new Bst<int>();
     bst1->add(13);
     bst1->add(53);
     bst1->add(33);
     bst1->add(23);
     bst1->add(9);
     bst1->add(60);
+    bst1->add(40);
+    bst1->add(38);
 
     std::cout << bst1->getSize() << std::endl;
     std::cout << bst1->find(23, normal_cmp) << std::endl;
-    std::cout << bst1->to_string(bst1->getRoot(), not_str) << std::endl;
-    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
     std::cout << std::to_string(bst1->getHeight()) << std::endl;
 
+    std::cout << bst1->to_string(bst1->getRoot(), not_str) << std::endl;
+    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
+    bst1->remove(bst1->find(53, normal_cmp));
+    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
+    std::cout << std::to_string(bst1->getHeight()) << std::endl;
+    bst1->remove(bst1->find(60, normal_cmp));
+    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
+    bst1->remove(bst1->find(40, normal_cmp));
+    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
 
+
+    bst1->clear();
     delete bst1;
     return 0;
 }
