@@ -72,18 +72,21 @@ int setIndeks() {
     return counter;
 }
 
-/* ==== LISTA ==== */
+/* ==== LISTA ==== */ // Można wywalić
 template<typename T>
 class ListNode {
 public:
     ListNode<T>* next;
+    ListNode<T>* prev;
     T data;
 
     ListNode() {
         next = NULL;
+        prev = NULL;
     }
     ~ListNode() {
         next = NULL;
+        prev = NULL;
     }
 };
 template<typename T>
@@ -117,7 +120,6 @@ public:
         size++;
     }
 };
-
 
 
 
@@ -206,7 +208,11 @@ public:
             Node<T>* temp_object = root;
             bool findNULL = false;
 
-            while (findNULL == false) {
+            //while (findNULL == false) {
+            for (int i = 0; i < size; i++){
+                if (temp_object == NULL) {
+                    return NULL;
+                }
                 int cmp = data_cmp(temp_object->data, dane);
 
                 if (cmp == 0) {
@@ -222,11 +228,15 @@ public:
             }
             return temp_object;
         }
+        return NULL;
     }
 
-    //Zrobić dla isIndicator'a
+    // Zrobić dla isIndicator'a
     void remove(Node<T>* temp_object) {
-        Node<T>* parent_object = temp_object->parent;
+        bool isRoot = false;
+        if (temp_object == root) {
+            isRoot = true;
+        }
 
         if (temp_object->l_node == NULL && temp_object->r_node == NULL) {
             if (temp_object->parent != NULL) {
@@ -237,67 +247,84 @@ public:
                     temp_object->parent->r_node = NULL;
                 }
             }
-
-            temp_object->~Node();
-            temp_object = NULL;
-            return;
+            if (isRoot) {
+                root = NULL;
+            }
         }
-        if (temp_object->l_node == NULL || temp_object->r_node == NULL) {
+        else if (temp_object->l_node == NULL || temp_object->r_node == NULL) {
             if (temp_object->l_node != NULL) {
                 temp_object->l_node->parent = temp_object->parent;
+                if (isRoot) {
+                    root = temp_object->l_node;
+                }
             }
             else {
                 temp_object->r_node->parent = temp_object->parent;
+                if (isRoot) {
+                    root = temp_object->r_node;
+                }
             }
 
-            if (temp_object->parent->l_node == temp_object) {
-                if (temp_object->l_node != NULL) {
-                    temp_object->parent->l_node = temp_object->l_node;
+            if (!isRoot) {
+                if (temp_object->parent->l_node == temp_object) {
+                    if (temp_object->l_node != NULL) {
+                        temp_object->parent->l_node = temp_object->l_node;
+                    }
+                    else {
+                        temp_object->parent->l_node = temp_object->r_node;
+                    }
                 }
                 else {
-                    temp_object->parent->l_node = temp_object->r_node;
-                }
-            }
-            else {
-                if (temp_object->l_node != NULL) {
-                    temp_object->parent->r_node = temp_object->l_node;
-                }
-                else {
-                    temp_object->parent->r_node = temp_object->r_node;
-                }
-            }
-
-            temp_object->~Node();
-            temp_object = NULL;
-            return;
-        }
-
-        //Tutaj usuwanie pełnego liścia z wyszukaniem zastępcy
-        Node<T>* succesor = findSuccessor(temp_object->l_node);
-        if (succesor != NULL) {
-            succesor->parent->r_node = succesor->l_node;
-            succesor->l_node->parent = succesor->parent;
-            succesor->l_node = NULL;
-
-            succesor->l_node = temp_object->l_node;
-            succesor->r_node = temp_object->r_node;
-            succesor->parent = temp_object->parent;
-            if (succesor->l_node != NULL) {
-                succesor->l_node->parent = succesor;
-            }
-            if (succesor->r_node != NULL) {
-                succesor->r_node->parent = succesor;
-            }
-            if (succesor->parent != NULL) {
-                if (temp_object->parent->r_node == temp_object) {
-                    succesor->parent->r_node = succesor;
-                }
-                else {
-                    succesor->parent->l_node = succesor;
+                    if (temp_object->l_node != NULL) {
+                        temp_object->parent->r_node = temp_object->l_node;
+                    }
+                    else {
+                        temp_object->parent->r_node = temp_object->r_node;
+                    }
                 }
             }
         }
+        else{
+            //Tutaj usuwanie pełnego liścia z wyszukaniem zastępcy
+            Node<T>* succesor = findSuccessor(temp_object->l_node);
+            if (succesor != NULL) {
+                succesor->l_node = NULL;
 
+                if (succesor->parent != root) {
+                    succesor->parent->r_node = succesor->l_node;
+
+                    if (succesor->l_node != temp_object->l_node) {
+                        succesor->l_node = temp_object->l_node;
+                    }
+                }
+
+                succesor->r_node = temp_object->r_node;
+                succesor->parent = temp_object->parent;
+                if (succesor->l_node != NULL) {
+                    succesor->l_node->parent = succesor;
+                }
+                if (succesor->r_node != NULL) {
+                    succesor->r_node->parent = succesor;
+                }
+
+                if (!isRoot) {
+                    succesor->l_node->parent = succesor->parent;
+                    if (succesor->parent != NULL) {
+                        if (temp_object->parent->r_node == temp_object) {
+                            succesor->parent->r_node = succesor;
+                        }
+                        else {
+                            succesor->parent->l_node = succesor;
+                        }
+                    }
+                }
+                else {
+                    root = succesor;
+                }
+            }
+        }
+
+        size--;
         temp_object->~Node();
         temp_object = NULL;
         return;
@@ -325,11 +352,12 @@ public:
         return std::max(max_height_l, max_height_r);
     }
     int height(Node<T>* temp_object, int temp_height, int max_height) {
+        temp_height++;
+
         if (temp_height > max_height) {
             max_height = temp_height;
         }
 
-        temp_height++;
         if (temp_object->l_node != NULL) {
             max_height = height(temp_object->l_node, temp_height, max_height);
         }
@@ -394,45 +422,25 @@ public:
         size--;
     }
 
-    //Still do poprawy
-    std::string to_string(Node<T>* temp_object, std::string(*data_to_str)(T)) {
-        std::ostringstream temp;
-        try {
-            if (size != 0) {
-                //int temp_size = 1;
-
-                temp << temp_object->data << ":\t[p: NULL l: ";
-                if (temp_object->l_node != NULL) {
-                    temp << temp_object->l_node->data;
-                }
-                else {
-                    temp << "NULL";
-                }
-                if (temp_object->r_node != NULL) {
-                    temp << " r: " << data_to_str(temp_object->r_node->data) << "]\n";
-                }
-                else {
-                    temp << " r: NULL]\n";
-                }
-
-
-                if (temp_object->l_node != NULL) {
-                    temp << to_string(temp_object->l_node, data_to_str);
-                }
-                if (temp_object->r_node != NULL) {
-                    temp << to_string(temp_object->r_node, data_to_str);
-                }
-            }
-            else {
-                throw 1;
-            }
+    void preOrder(List<T>* list, Node<T>* temp_object) {
+        if (temp_object != NULL) {
+            list->add(temp_object->data);
+            preOrder(list, temp_object->l_node);
+            preOrder(list, temp_object->r_node);
         }
-        catch (...) {
-            temp << "Brak rekordow!\n";
-        }
-        return temp.str();
+        return;
     }
-    std::string to_string(Node<T>* temp_object) {
+    void inOrder(List<T>* list, Node<T>* temp_object) {
+        if (temp_object != NULL) {
+            preOrder(list, temp_object->l_node);
+            list->add(temp_object->data);
+            preOrder(list, temp_object->r_node);
+        }
+        return;
+    }
+
+    //Zrobić skróconą reprezentację...
+    std::string to_string(Node<T>* temp_object, std::string(*data_to_str)(T)) {
         std::ostringstream temp;
         try {
             if (size != 0) {
@@ -455,7 +463,7 @@ public:
                 else {
                     temp << " r: NULL";
                 }
-                temp << " data: " << temp_object->data << "]\n";
+                temp << " data: " << data_to_str(temp_object->data) << "]\n";
 
                 if (temp_object->l_node != NULL) {
                     temp << to_string(temp_object->l_node);
@@ -474,12 +482,60 @@ public:
         }
         return temp.str();
     }
+    std::string to_string(Node<T>* temp_object) {
+        std::ostringstream temp;
+        try {
+            if (size != 0) {
+                if (size <= 25) {
+                    temp << temp_object->indeks << ":\t[p: ";
+                    if (temp_object->parent != NULL) {
+                        temp << temp_object->parent->indeks << "\t";
+                    }
+                    else {
+                        temp << "NULL";
+                    }
+                    if (temp_object->l_node != NULL) {
+                        temp << " l: " << temp_object->l_node->indeks << "\t";
+                    }
+                    else {
+                        temp << " l: NULL";
+                    }
+                    if (temp_object->r_node != NULL) {
+                        temp << " r: " << temp_object->r_node->indeks << "\t";
+                    }
+                    else {
+                        temp << " r: NULL";
+                    }
+                    temp << " data: " << temp_object->data << "]\n";
+
+                    if (temp_object->l_node != NULL) {
+                        temp << to_string(temp_object->l_node);
+                    }
+                    if (temp_object->r_node != NULL) {
+                        temp << to_string(temp_object->r_node);
+                    }
+                }
+                else{
+                    temp << temp_object->indeks << ":\t[p: ";
+                }
+                return temp.str();
+            }
+            else {
+                throw 1;
+            }
+        }
+        catch (...) {
+            temp << "Brak rekordow!\n";
+        }
+        return temp.str();
+    }
 };
 
 
 int main()
 {
     Bst<int>* bst1 = new Bst<int>();
+    
     bst1->add(13);
     bst1->add(53);
     bst1->add(33);
@@ -488,20 +544,25 @@ int main()
     bst1->add(60);
     bst1->add(40);
     bst1->add(38);
+    bst1->add(10);
 
     std::cout << bst1->getSize() << std::endl;
     std::cout << bst1->find(23, normal_cmp) << std::endl;
     std::cout << std::to_string(bst1->getHeight()) << std::endl;
 
-    std::cout << bst1->to_string(bst1->getRoot(), not_str) << std::endl;
+    std::cout << "FIND:" << bst1->find(199, normal_cmp) << std::endl;
+
     std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
-    bst1->remove(bst1->find(53, normal_cmp));
+    bst1->remove(bst1->find(13, normal_cmp));
     std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
-    std::cout << std::to_string(bst1->getHeight()) << std::endl;
-    bst1->remove(bst1->find(60, normal_cmp));
-    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
-    bst1->remove(bst1->find(40, normal_cmp));
-    std::cout << bst1->to_string(bst1->getRoot()) << std::endl;
+
+
+    List<int>* l1 = new List<int>();
+    bst1->preOrder(l1, bst1->getRoot());
+    List<int>* l2 = new List<int>();
+    bst1->inOrder(l2, bst1->getRoot());
+
+
 
 
     bst1->clear();
