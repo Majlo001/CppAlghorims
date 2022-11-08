@@ -1,7 +1,11 @@
 ﻿  main.cpp
-  Generating code
-  Previous IPDB not found, fall back to full compilation.
-Z:\ZUT_Algorithms2\BinarySearchProject\main.cpp(164): warning C4715: 'bst<int>::find': not all control paths return a value
-  All 142 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(1074,5): error MSB6006: "link.exe" exited with code 128.
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\BinarySearchProject\main.cpp(707,30): warning C4244: "inicjowanie": konwersja z "double" do "int", możliwa utrata danych
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\BinarySearchProject\main.cpp(707,25): warning C4244: "inicjowanie": konwersja z "double" do "const int", możliwa utrata danych
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\BinarySearchProject\main.cpp(720,30): warning C4244: "inicjowanie": konwersja z "double" do "int", możliwa utrata danych
+C:\Users\sm51115\source\repos\ZUT_Algorithms2\BinarySearchProject\main.cpp(720,25): warning C4244: "inicjowanie": konwersja z "double" do "const int", możliwa utrata danych
+  Trwa generowanie kodu
+  0 of 92 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  BinarySearchProject.vcxproj -> C:\Users\sm51115\source\repos\ZUT_Algorithms2\x64\Release\BinarySearchTree.exe
