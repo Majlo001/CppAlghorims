@@ -2,6 +2,17 @@
 #include <string>
 #include <time.h>
 #include <sstream>
+#include <math.h> 
+
+static int counter = 0;
+
+void resetCounter() {
+    counter = 0;
+}
+int setIndeks() {
+    counter++;
+    return (counter - 1);
+}
 
 class Person {
 public:
@@ -66,11 +77,6 @@ std::string just_str(std::string str) {
 }
 
 
-int setIndeks() {
-    static int counter = -1;
-    counter++;
-    return counter;
-}
 
 /* ==== LISTA ==== */ 
 template<typename T>
@@ -123,6 +129,7 @@ public:
 
 
 
+/* ==== DRZEWO BINARNE ==== */
 template<typename T>
 class Node {
 public:
@@ -146,8 +153,6 @@ public:
         indeks = 0;
     }
 };
-
-
 template<typename T>
 class Bst {
 private:
@@ -157,6 +162,11 @@ public:
     Bst() {
         root = NULL;
         size = 0;
+    }
+    ~Bst() {
+        root = NULL;
+        size = 0;
+        resetCounter();
     }
     int getSize() {
         return size;
@@ -204,7 +214,6 @@ public:
         }
         size++;
     }
-
     Node<T>* find(T dane, int(*data_cmp)(T, T)) {
         if (size != 0) {
             Node<T>* temp_object = root;
@@ -230,7 +239,6 @@ public:
         return NULL;
     }
 
-    // Zrobić dla isIndicator'a
     void remove(Node<T>* temp_object) {
         bool isRoot = false;
         if (temp_object == root) {
@@ -247,7 +255,10 @@ public:
                 }
             }
             if (isRoot) {
+                delete root;
                 root = NULL;
+                size--;
+                return;
             }
         }
         else if (temp_object->l_node == NULL || temp_object->r_node == NULL) {
@@ -324,7 +335,7 @@ public:
 
         size--;
         temp_object->~Node();
-        temp_object = NULL;
+        delete temp_object;
         return;
     }
     void remove(Node<T>* temp_object, bool isIndicator) {
@@ -343,7 +354,13 @@ public:
                 }
             }
             if (isRoot) {
+                if (isIndicator == true) {
+                    delete root->data;
+                }
+                delete root;
                 root = NULL;
+                size--;
+                return;
             }
         }
         else if (temp_object->l_node == NULL || temp_object->r_node == NULL) {
@@ -419,11 +436,11 @@ public:
         }
 
         size--;
-        temp_object->~Node();
         if (isIndicator == true) {
-            delete temp_object;
+            delete temp_object->data;
         }
-        temp_object = NULL;
+        temp_object->~Node();
+        delete temp_object;
         return;
     }
     Node<T>* findSuccessor(Node<T>* temp_object) {
@@ -473,9 +490,10 @@ public:
         if (temp_object->r_node != NULL) {
             clear(temp_object->r_node);
         }
-        clear(temp_object);
-        size--;
+        delete temp_object;
+        size = 0;
         root = NULL;
+        resetCounter();
     }
     void clear(bool isIndicator) {
         Node<T>* temp_object = root;
@@ -485,9 +503,13 @@ public:
         if (temp_object->r_node != NULL) {
             clear(temp_object->r_node, isIndicator);
         }
-        clear(temp_object);
-        size--;
+        if (isIndicator == true) {
+            delete temp_object->data;
+        }
+        delete temp_object;
+        size = 0;
         root = NULL;
+        resetCounter();
     }
     void clear(Node<T>* temp_object) {
         if (temp_object->l_node != NULL) {
@@ -498,6 +520,7 @@ public:
         }
         if (temp_object->l_node == NULL && temp_object->r_node == NULL) {
             temp_object->~Node();
+            delete temp_object;
         }
 
         size--;
@@ -510,10 +533,11 @@ public:
             clear(temp_object->r_node);
         }
         if (temp_object->l_node == NULL && temp_object->r_node == NULL) {
-            temp_object->~Node();
             if (isIndicator == true) {
-                delete temp_object;
+                delete temp_object->data;
             }
+            temp_object->~Node();
+            delete temp_object;
         }
 
         size--;
@@ -535,7 +559,6 @@ public:
         }
         return;
     }
-
 
     std::string to_string(Node<T>* temp_object, std::string(*data_to_str)(T)) {
         std::ostringstream temp;
@@ -605,55 +628,6 @@ public:
         }
         return temp.str();
     }
-
-    //Usunąć albo poprawić
-    std::string to_string(Node<T>* temp_object) {
-        std::ostringstream temp;
-        try {
-            if (size != 0) {
-                if (size <= 32) {
-                    temp << temp_object->indeks << ":\t[p: ";
-                    if (temp_object->parent != NULL) {
-                        temp << temp_object->parent->indeks << "\t";
-                    }
-                    else {
-                        temp << "NULL";
-                    }
-                    if (temp_object->l_node != NULL) {
-                        temp << " l: " << temp_object->l_node->indeks << "\t";
-                    }
-                    else {
-                        temp << " l: NULL";
-                    }
-                    if (temp_object->r_node != NULL) {
-                        temp << " r: " << temp_object->r_node->indeks << "\t";
-                    }
-                    else {
-                        temp << " r: NULL";
-                    }
-                    temp << " data: " << temp_object->data << "]\n";
-
-                    if (temp_object->l_node != NULL) {
-                        temp << to_string(temp_object->l_node);
-                    }
-                    if (temp_object->r_node != NULL) {
-                        temp << to_string(temp_object->r_node);
-                    }
-                }
-                else{
-                    temp << temp_object->indeks << ":\t[p: ";
-                }
-                return temp.str();
-            }
-            else {
-                throw 1;
-            }
-        }
-        catch (...) {
-            temp << "Brak rekordow!\n";
-        }
-        return temp.str();
-    }
 };
 
 
@@ -696,15 +670,12 @@ public:
 
 int main()
 {
-    //...
-    const int MAX_ORDER = 3; // m a k s y m a l n y rzad w i e l k o s c i d o d a w a n y c h danych
-
-
+    const int MAX_ORDER = 7;
     Bst<Person*>* bst = new Bst<Person*>();
 
     for (int o = 1; o <= MAX_ORDER; o++)
         {
-            const int n = pow(10, o); // rozmiar danych
+            const int n = pow(10, o);
 
             clock_t t1 = clock();
             for (int i = 0; i < n; i++)
@@ -713,12 +684,18 @@ int main()
                 bst->add(new Person(pesel, "Adam", "Adamiak", 1000 + i), person_cmp);
             }
             clock_t t2 = clock();
-            //... // wypis na ekran a k t u a l n e j postaci drzewa ( s k r o t o w e j ) wraz z p o m i a r a m i c z a s o w y m i i w / w
-                // w i e l k o s c i a m i
-                // w y s z u k i w a n i e
+            double calc = ((double)bst->getHeight()) / (double)log2((double)bst->getSize());
 
-            const int m = pow(10, 4); // liczba prob w y s z u k i w a n i a
-            int hits = 0; // liczba trafien
+            std::cout << "Wielkosc drzewa: " << bst->getSize() << std::endl;
+            std::cout << "Wysokosc drzewa: " << bst->getHeight() << std::endl;
+            std::cout << "Obliczenia: " << calc << std::endl;
+            std::cout << bst->to_string(bst->getRoot(), person_to_str) << std::endl;
+
+            double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+            std::cout << "Pomiar czasowy dodawania: " << time << "s dla 10^" << o << " elementow." << std::endl;
+
+            const int m = pow(10, 4);
+            int hits = 0;
             t1 = clock();
 
             for (int i = 0; i < m; i++)
@@ -731,8 +708,12 @@ int main()
                 delete person;
             }
             t2 = clock();
-            //... // wypis na ekran p o m i a r o w c z a s o w y c h i liczby trafien
-            bst->clear(true); // c z y s z c z e n i e drzewa wraz z u w a l n i a n i e m pamieci danych
+
+            time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+            std::cout << "Ilosc trafien: " << std::to_string(hits) << std::endl;
+            std::cout << "Pomiar czasowy szukania: " << time << "s dla 10^" << o << " elementow.\n\n" << std::endl;
+
+            bst->clear(true);
         }
     delete bst;
     return 0;
