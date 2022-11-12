@@ -118,10 +118,10 @@ public:
             tail = new_object;
         }
         else {
-            ListNode<T>* temp_object = tail;
-            temp_object->next = new_object;
-            new_object->prev = temp_object;
-            tail = new_object;
+        ListNode<T>* temp_object = tail;
+        temp_object->next = new_object;
+        new_object->prev = temp_object;
+        tail = new_object;
         }
         size++;
     }
@@ -179,6 +179,7 @@ public:
     void add(T dane, int(*data_cmp)(T, T)) {
         Node<T>* new_object = new Node<T>;
         new_object->data = dane;
+        new_object->isBlack = false;
 
         if (size == 0) {
             root = new_object;
@@ -197,6 +198,7 @@ public:
                         new_object->parent = temp_object;
 
                         findNULL = true;
+                        //checkAdd(new_object);
                         break;
                     }
                     temp_object = temp_object->r_node;
@@ -207,6 +209,7 @@ public:
                         new_object->parent = temp_object;
 
                         findNULL = true;
+                        //checkAdd(new_object);
                         break;
                     }
                     temp_object = temp_object->l_node;
@@ -215,6 +218,71 @@ public:
         }
         size++;
     }
+    void checkAdd(Node<T>* temp_object) {
+        Node<T>* uncle_object;
+
+        if (temp_object->parent != NULL) {
+            while (temp_object->parent->isBlack == false) {
+                if (temp_object->parent == temp_object->parent->parent->l_node) {
+                    uncle_object = temp_object->parent->parent->r_node;
+
+                    if (uncle_object != NULL && uncle_object->isBlack == false) {
+                        recolor(uncle_object, temp_object);
+
+                        if (temp_object->parent->parent != NULL && temp_object->parent->parent->parent != NULL) {
+                            temp_object = temp_object->parent->parent;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                    else {
+                        if (temp_object == temp_object->parent->r_node) {
+                            temp_object = temp_object->parent;
+                            //Rotacja w lewo here
+                            rotationLeft(temp_object, temp_object->r_node);
+                        }
+                        temp_object->parent->isBlack = true;
+                        temp_object->parent->parent->isBlack = false;
+                        //Rotacja w prawo here
+                        rotationRight(temp_object, temp_object->l_node);
+                    }
+                }
+                else {
+                    uncle_object = temp_object->parent->parent->l_node;
+
+                    if (uncle_object != NULL && uncle_object->isBlack == false) {
+                        recolor(uncle_object, temp_object);
+
+                        if (temp_object->parent->parent != NULL && temp_object->parent->parent->parent != NULL) {
+                            temp_object = temp_object->parent->parent;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                    else {
+                        if (temp_object == temp_object->parent->l_node) {
+                            temp_object = temp_object->parent;
+
+                            rotationRight(temp_object, temp_object->l_node);
+                        }
+                        temp_object->parent->isBlack = true;
+                        temp_object->parent->parent->isBlack = false;
+
+                        rotationLeft(temp_object, temp_object->r_node);
+                    }
+                }
+            }
+        }
+    }
+    void recolor(Node<T>* uncle_object, Node<T>* temp_object) {
+        uncle_object->isBlack = true;
+        temp_object->parent->isBlack = true;
+        temp_object->parent->parent->isBlack = false;
+    }
+
+
     Node<T>* find(T dane, int(*data_cmp)(T, T)) {
         if (size != 0) {
             Node<T>* temp_object = root;
@@ -240,6 +308,48 @@ public:
         return NULL;
     }
 
+    void rotationLeft(Node<T>* parent_object, Node<T>* child_object) {
+        parent_object->r_node = child_object->l_node;
+        child_object->parent = parent_object->parent;
+
+        if (child_object->l_node != NULL ) {
+            child_object->l_node->parent = parent_object;
+        }
+        if (parent_object->parent == NULL) {
+            root = child_object;
+        }
+        else {
+            if (parent_object == parent_object->parent->l_node) {
+                parent_object->parent->l_node = child_object;
+            }
+            else {
+                parent_object->parent->r_node = child_object;
+            }
+        }
+        child_object->l_node = parent_object;
+        parent_object->parent = child_object;
+    }
+    void rotationRight(Node<T>* parent_object, Node<T>* child_object) {
+        parent_object->l_node = child_object->r_node;
+        child_object->parent = parent_object->parent;
+
+        if (child_object->r_node != NULL) {
+            child_object->r_node->parent = parent_object;
+        }
+        if (parent_object->parent == NULL) {
+            root = child_object;
+        }
+        else {
+            if (parent_object == parent_object->parent->l_node) {
+                parent_object->parent->l_node = child_object;
+            }
+            else {
+                parent_object->parent->r_node = child_object;
+            }
+        }
+        child_object->r_node = parent_object;
+        parent_object->parent = child_object;
+    }
 
 
 
@@ -438,21 +548,32 @@ int main()
     Rbt<int>* rbt1 = new Rbt<int>();
     
     rbt1->add(50, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(70, normal_cmp);
-    rbt1->add(45, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+    rbt1->add(15, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(10, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(40, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(60, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(75, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(38, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(45, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
     rbt1->add(43, normal_cmp);
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
 
-    std::cout << rbt1->getSize() << std::endl;
-    std::cout << rbt1->find(23, normal_cmp) << std::endl;
-    std::cout << std::to_string(rbt1->getHeight()) << std::endl;
+    Node<int>* temp = rbt1->find(45, normal_cmp);
+    rbt1->rotationLeft(temp->parent, temp);
 
-    std::cout << "FIND:" << rbt1->find(199, normal_cmp) << std::endl;
+    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+    temp = rbt1->find(45, normal_cmp);
+    rbt1->rotationRight(temp, temp->l_node);
 
     std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
 
