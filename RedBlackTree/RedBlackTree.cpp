@@ -198,7 +198,6 @@ public:
                         new_object->parent = temp_object;
 
                         findNULL = true;
-                        //checkAdd(new_object);
                         break;
                     }
                     temp_object = temp_object->r_node;
@@ -209,42 +208,35 @@ public:
                         new_object->parent = temp_object;
 
                         findNULL = true;
-                        //checkAdd(new_object);
                         break;
                     }
                     temp_object = temp_object->l_node;
                 }
             }
+            checkAdd(new_object);
         }
         size++;
     }
     void checkAdd(Node<T>* temp_object) {
         Node<T>* uncle_object;
 
-        if (temp_object->parent != NULL) {
-            while (temp_object->parent->isBlack == false) {
+        if (temp_object->parent != NULL && temp_object->parent->parent != NULL) {
+            if (temp_object->parent->isBlack == false) {
                 if (temp_object->parent == temp_object->parent->parent->l_node) {
                     uncle_object = temp_object->parent->parent->r_node;
 
                     if (uncle_object != NULL && uncle_object->isBlack == false) {
                         recolor(uncle_object, temp_object);
-
-                        if (temp_object->parent->parent != NULL && temp_object->parent->parent->parent != NULL) {
-                            temp_object = temp_object->parent->parent;
-                        }
-                        else {
-                            return;
-                        }
+                        checkAdd(temp_object->parent->parent);
                     }
                     else {
                         if (temp_object == temp_object->parent->r_node) {
                             temp_object = temp_object->parent;
-                            //Rotacja w lewo here
                             rotationLeft(temp_object, temp_object->r_node);
                         }
-                        temp_object->parent->isBlack = true;
-                        temp_object->parent->parent->isBlack = false;
-                        //Rotacja w prawo here
+                        temp_object->parent->isBlack = !temp_object->parent->isBlack;
+                        temp_object->parent->parent->isBlack = !temp_object->parent->parent->isBlack;
+                        temp_object = temp_object->parent->parent;
                         rotationRight(temp_object, temp_object->l_node);
                     }
                 }
@@ -253,33 +245,28 @@ public:
 
                     if (uncle_object != NULL && uncle_object->isBlack == false) {
                         recolor(uncle_object, temp_object);
-
-                        if (temp_object->parent->parent != NULL && temp_object->parent->parent->parent != NULL) {
-                            temp_object = temp_object->parent->parent;
-                        }
-                        else {
-                            return;
-                        }
+                        checkAdd(temp_object->parent->parent);
                     }
                     else {
                         if (temp_object == temp_object->parent->l_node) {
                             temp_object = temp_object->parent;
-
                             rotationRight(temp_object, temp_object->l_node);
                         }
-                        temp_object->parent->isBlack = true;
-                        temp_object->parent->parent->isBlack = false;
-
+                        temp_object->parent->isBlack = !temp_object->parent->isBlack;
+                        temp_object->parent->parent->isBlack = !temp_object->parent->parent->isBlack;
+                        temp_object = temp_object->parent->parent;
                         rotationLeft(temp_object, temp_object->r_node);
                     }
                 }
             }
         }
+        /*  NA WSZELKI WYPADEK  */
+        root->isBlack = true;
     }
     void recolor(Node<T>* uncle_object, Node<T>* temp_object) {
-        uncle_object->isBlack = true;
-        temp_object->parent->isBlack = true;
-        temp_object->parent->parent->isBlack = false;
+        uncle_object->isBlack = !uncle_object->isBlack;
+        temp_object->parent->isBlack = !temp_object->parent->isBlack;
+        temp_object->parent->parent->isBlack = !temp_object->parent->parent->isBlack;
     }
 
 
@@ -309,6 +296,9 @@ public:
     }
 
     void rotationLeft(Node<T>* parent_object, Node<T>* child_object) {
+        if (parent_object == NULL || child_object == NULL) {
+            return;
+        }
         parent_object->r_node = child_object->l_node;
         child_object->parent = parent_object->parent;
 
@@ -328,8 +318,12 @@ public:
         }
         child_object->l_node = parent_object;
         parent_object->parent = child_object;
+        return;
     }
     void rotationRight(Node<T>* parent_object, Node<T>* child_object) {
+        if (parent_object == NULL || child_object == NULL) {
+            return;
+        }
         parent_object->l_node = child_object->r_node;
         child_object->parent = parent_object->parent;
 
@@ -349,6 +343,7 @@ public:
         }
         child_object->r_node = parent_object;
         parent_object->parent = child_object;
+        return;
     }
 
 
@@ -543,42 +538,114 @@ public:
     }
 };
 
+//int main()
+//{
+//    Rbt<int>* rbt1 = new Rbt<int>();
+//    
+//    /*rbt1->add(50, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(70, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(15, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(10, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(40, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(60, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(75, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(38, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(45, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    rbt1->add(43, normal_cmp);
+//    rbt1->add(72, normal_cmp);
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;*/
+//
+//
+//    rbt1->add(50, normal_cmp);
+//    rbt1->add(20, normal_cmp);
+//    rbt1->add(70, normal_cmp);
+//    rbt1->add(10, normal_cmp);
+//    rbt1->add(25, normal_cmp);
+//    rbt1->add(60, normal_cmp);
+//    rbt1->add(72, normal_cmp);
+//    rbt1->add(23, normal_cmp);
+//    rbt1->add(40, normal_cmp);
+//    rbt1->add(30, normal_cmp);
+//
+//    /*rbt1->add(10, normal_cmp);
+//    rbt1->add(7, normal_cmp);
+//    rbt1->add(5, normal_cmp);*/
+//
+//    std::cout << rbt1->getHeight() << std::endl;
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//
+//    /*Node<int>* temp = rbt1->find(45, normal_cmp);
+//    rbt1->rotationLeft(temp->parent, temp);
+//
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+//    temp = rbt1->find(45, normal_cmp);
+//    rbt1->rotationRight(temp, temp->l_node);
+//
+//    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;*/
+//
+//
+//    rbt1->clear();
+//    delete rbt1;
+//    return 0;
+//}
+
 int main()
 {
-    Rbt<int>* rbt1 = new Rbt<int>();
-    
-    rbt1->add(50, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(70, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(15, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(10, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(40, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(60, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(75, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(38, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(45, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    rbt1->add(43, normal_cmp);
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+    const int MAX_ORDER = 7;
+    Rbt<Person*>* bst = new Rbt<Person*>();
 
-    Node<int>* temp = rbt1->find(45, normal_cmp);
-    rbt1->rotationLeft(temp->parent, temp);
+    for (int o = 1; o <= MAX_ORDER; o++)
+    {
+        const int n = pow(10, o);
 
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
-    temp = rbt1->find(45, normal_cmp);
-    rbt1->rotationRight(temp, temp->l_node);
+        clock_t t1 = clock();
+        for (int i = 0; i < n; i++)
+        {
+            int pesel = (rand() << 15) + rand();
+            bst->add(new Person(pesel, "Adam", "Adamiak", i), person_cmp);
+        }
+        clock_t t2 = clock();
+        double calc = (2 * (double)log2((double)bst->getSize() + 1));
 
-    std::cout << rbt1->to_string(rbt1->getRoot(), not_str) << std::endl;
+        std::cout << "Wielkosc drzewa: " << bst->getSize() << std::endl;
+        std::cout << "Wysokosc drzewa: " << bst->getHeight() << std::endl;
+        std::cout << "Obliczenia: " << calc << std::endl;
+        std::cout << bst->to_string(bst->getRoot(), person_to_str) << std::endl;
 
+        double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+        std::cout << "Pomiar czasowy dodawania: " << time << "s dla 10^" << o << " elementow." << std::endl;
+        std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 
-    rbt1->clear();
-    delete rbt1;
+        const int m = pow(10, 4);
+        int hits = 0;
+        t1 = clock();
+
+        for (int i = 0; i < m; i++)
+        {
+            int pesel = (rand() << 15) + rand();
+            Person* person = new Person(pesel, "Adam", "Adamiak", i);
+
+            Node<Person*>* result = bst->find(person, person_cmp);
+            if (result != NULL) hits++;
+            delete person;
+        }
+        t2 = clock();
+
+        time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+        std::cout << "Ilosc trafien: " << std::to_string(hits) << std::endl;
+        std::cout << "Pomiar czasowy szukania: " << time << "s dla 10^" << o << " elementow.\n\n" << std::endl;
+
+        bst->clear(true);
+    }
+    delete bst;
     return 0;
 }
