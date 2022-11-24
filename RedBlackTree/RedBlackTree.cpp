@@ -614,11 +614,12 @@ int main()
             bst->add(new Person(pesel, "Adam", "Adamiak", i), person_cmp);
         }
         clock_t t2 = clock();
-        double calc = (2 * (double)log2((double)bst->getSize() + 1));
+        double calc = log2((double)bst->getSize() + 1);
 
         std::cout << "Wielkosc drzewa: " << bst->getSize() << std::endl;
         std::cout << "Wysokosc drzewa: " << bst->getHeight() << std::endl;
         std::cout << "Obliczenia: " << calc << std::endl;
+        std::cout << "Wyskosc/Obliczenia: " << bst->getHeight()/calc << std::endl;
         std::cout << bst->to_string(bst->getRoot(), person_to_str) << std::endl;
 
         double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
