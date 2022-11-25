@@ -4,7 +4,7 @@
 #include <sstream>
 #include <math.h> 
 #include <cmath> 
-
+#include "List.h"
 
 /* ==== PERSON ==== */
 class Person {
@@ -68,62 +68,13 @@ std::string just_str(std::string str) {
 }
 
 
-/* ==== LINKED LIST ==== */
-template<typename T>
-class ListNode {
-public:
-    ListNode<T>* next;
-    ListNode<T>* prev;
-    T data;
-
-    ListNode() {
-        next = NULL;
-        prev = NULL;
-    }
-    ~ListNode() {
-        next = NULL;
-        prev = NULL;
-    }
-};
-template<typename T>
-class List {
-private:
-    ListNode<T>* head;
-    ListNode<T>* tail;
-    int size;
-public:
-    List() {
-        head = NULL;
-        tail = NULL;
-        size = 0;
-    }
-    void add(T dane) {
-        ListNode<T>* new_object = new ListNode<T>;
-        new_object->data = dane;
-        new_object->next = NULL;
-        new_object->prev = NULL;
-
-        if (size == 0) {
-            head = new_object;
-            tail = new_object;
-        }
-        else {
-            ListNode<T>* temp_object = tail;
-            temp_object->next = new_object;
-            new_object->prev = temp_object;
-            tail = new_object;
-        }
-        size++;
-    }
-};
-
 
 
 /* ==== HASH TABLE ==== */
 template<typename T>
 class HashTable {
 private:
-    T* dArray;
+    List<T>* dArray;
     size_t size;
     size_t capacity;
 public:
@@ -151,9 +102,13 @@ public:
 
     void resize() {
         capacity *= 2;
-        T* temp_array = new T[capacity];
-        for (int i = 0; i < size; i++) {
-            temp_array[i] = dArray[i];
+        List<T>* temp_array = new List<T>[capacity];
+
+        //TODO: funkcja rehashująca
+
+        for (int i = 0; i < capacity; i++) {
+            List<T>* list = new List<T>();
+            dArray[i] = *list;
         }
         delete[] dArray;
         dArray = temp_array;
@@ -161,16 +116,33 @@ public:
     void add(std::string key, T value) {
         if (size == 0 && capacity == 0) {
             capacity = 1024;
-            dArray = new T[capacity];
+            dArray = new List<T>[capacity];
+
+            for (int i = 0; i < capacity; i++) {
+                List<T>* list = new List<T>();
+                dArray[i] = *list;
+            }
             return;
         }
-        if (size == capacity) {
+        if (size/capacity >= 0.75) {
             resize();
         }
+        dArray[hashValue(key)].add(key, value);
         size++;
-        dArray[hashValue(key)] = value;
     }
-    bool change(size_t indeks, T data) {
+
+    ListNode<T>* get(std::string key) {
+        if (size != 0 && key != "") {
+            return dArray[hashValue(key)].get(key);
+        }
+        return NULL;
+    }
+
+    bool remove(std::string key) {
+        return dArray[hashValue(key)].remove(key);
+    }
+
+    /*bool change(size_t indeks, T data) {
         if (indeks < size - 1 && size != 0) {
             dArray[indeks] = data;
             return 1;
@@ -218,23 +190,6 @@ public:
         capacity = 1;
         delete[] dArray;
     }
-    std::string show_index(std::string(*data_to_str)(T), int indeks) {
-        std::ostringstream os;
-        if (size != 0) {
-            if (indeks < size - 1) {
-                if (data_to_str) {
-                    os << data_to_str(dArray[indeks]) << "\n";
-                }
-            }
-            else {
-                os << "Indeks poza zakresem!\n";
-            }
-        }
-        else {
-            os << "Brak rekordow!\n";
-        }
-        return os.str();
-    }
 
     std::string to_string(std::string(*data_to_str)(T)) {
         std::ostringstream os;
@@ -272,7 +227,9 @@ public:
             os << "Brak rekordow!\n";
         }
         return os.str();
-    }
+    }*/
+
+
 
     int hashValue(std::string str) {
         int value = 0;
@@ -289,13 +246,15 @@ public:
 };
 
 
-std::string randomNumber(int len) {
-    const char numbers[] = "0123456789";
+std::string randomString(int len) {
+    const char chars[] = "0123456789"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz";
     std::string tmp;
     tmp.reserve(len);
 
     for (int i = 0; i < len; ++i) {
-        tmp += numbers[rand() % (sizeof(numbers) - 1)];
+        tmp += chars[rand() % (sizeof(chars) - 1)];
     }
 
     return tmp;
@@ -312,8 +271,11 @@ int main()
 
     for (int i = 0; i < 10; i++) {
         int randnum = rand() % 1000000 + 1;
-        ha->add(randomNumber(6), i);
+        ha->add(randomString(6), i);
     }
+    ha->add("kotkot", 2022);
 
-    std::cout << ha->hashValue("ala") << std::endl;
+    std::cout << ha->get("kotkot") << std::endl;
+    std::cout << ha->remove("kotkot") << std::endl;
+    std::cout << ha->get("kotkot") << std::endl;
 }

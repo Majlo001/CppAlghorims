@@ -1,0 +1,282 @@
+#pragma once
+
+
+/* ==== LINKED LIST ==== */
+template<typename T>
+class ListNode {
+public:
+    ListNode<T>* next;
+    ListNode<T>* prev;
+    std::string key;
+    T value;
+
+    ListNode() {
+        next = NULL;
+        prev = NULL;
+    }
+    ~ListNode() {
+        next = NULL;
+        prev = NULL;
+    }
+};
+
+
+template<typename T>
+class List {
+private:
+    ListNode<T>* head;
+    ListNode<T>* tail;
+    int size;
+public:
+    List() {
+        head = NULL;
+        tail = NULL;
+        size = 0;
+    }
+    void add(std::string key, T value) {
+        ListNode<T>* new_object = new ListNode<T>;
+        new_object->key = key;
+        new_object->value = value;
+        new_object->next = NULL;
+        new_object->prev = NULL;
+
+        if (size == 0) {
+            head = new_object;
+            tail = new_object;
+        }
+        else {
+            ListNode<T>* temp_object = tail;
+            temp_object->next = new_object;
+            new_object->prev = temp_object;
+            tail = new_object;
+        }
+        size++;
+    }
+    ListNode<T>* get(std::string key) {
+        ListNode<T>* temp_object = head;
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                if (key == temp_object->key) {
+                    std::cout << temp_object->key << " " << temp_object->value << std::endl;
+                    return temp_object;
+                }
+                temp_object = temp_object->next;
+            }
+        }
+        return NULL;
+    }
+
+    bool del_first(bool isIndicator) {
+        if (size == 0) {
+            return 0;
+        }
+        else {
+            ListNode<T>* head_object = head;
+
+            if (size == 1) {
+
+                if (isIndicator == true) {
+                    delete head_object->data;
+                }
+                delete head_object;
+
+                head = nullptr;
+                tail = nullptr;
+                size--;
+                return 1;
+            }
+            else {
+                ListNode<T>* temp = head_object->next;
+                head = temp;
+                temp->prev = nullptr;
+            }
+            head_object->next = nullptr;
+            head_object->prev = nullptr;
+
+            if (isIndicator == true) {
+                delete head_object->data;
+            }
+            delete head_object;
+            size--;
+            return 1;
+        }
+    }
+    bool del_first() {
+        if (size == 0) {
+            return 0;
+        }
+        else {
+            ListNode<T>* head_object = head;
+
+            if (size == 1) {
+                delete head_object;
+
+                head = nullptr;
+                tail = nullptr;
+                size--;
+                return 1;
+            }
+            else {
+                ListNode<T>* temp = head_object->next;
+                head = temp;
+                temp->prev = nullptr;
+            }
+            head_object->next = nullptr;
+            head_object->prev = nullptr;
+
+            delete head_object;
+            size--;
+            return 1;
+        }
+    }
+    bool del_last(bool isIndicator) {
+        if (size == 0) {
+            return 0;
+        }
+        else {
+            ListNode<T>* tail_object = tail;
+
+            if (size == 1) {
+                head = nullptr;
+                tail = nullptr;
+            }
+            else {
+                ListNode<T>* temp = tail_object->prev;
+                tail = temp;
+                temp->next = nullptr;
+            }
+            tail_object->next = nullptr;
+            tail_object->prev = nullptr;
+
+            if (isIndicator == true) {
+                delete tail_object->data;
+            }
+            delete tail_object;
+            size--;
+            return 1;
+        }
+    }
+    bool del_last() {
+        if (size == 0) {
+            return 0;
+        }
+        else {
+            ListNode<T>* tail_object = tail;
+
+            if (size == 1) {
+                head = nullptr;
+                tail = nullptr;
+            }
+            else {
+                ListNode<T>* temp = tail_object->prev;
+                tail = temp;
+                temp->next = nullptr;
+            }
+            tail_object->next = nullptr;
+            tail_object->prev = nullptr;
+
+            delete tail_object;
+            size--;
+            return 1;
+        }
+    }
+    bool del_all(bool isIndicator) {
+        if (size == 0) {
+            return 0;
+        }
+        else {
+            ListNode<T>* head_object = head;
+            ListNode<T>* temp_object;
+            head = nullptr;
+            tail = nullptr;
+
+            while (size > 0) {
+                temp_object = head_object->next;
+
+                head_object->next = nullptr;
+                head_object->prev = nullptr;
+                /*if (isIndicator == true) {
+                    delete head_object->data;
+                }*/
+                delete head_object;
+                head_object = temp_object;
+                size--;
+            }
+        }
+        return 1;
+    }
+    bool del_all() {
+        if (size == 0) {
+            return 0;
+        }
+        else {
+            ListNode<T>* head_object = head;
+            ListNode<T>* temp_object;
+            head = nullptr;
+            tail = nullptr;
+
+            while (size > 0) {
+                temp_object = head_object->next;
+
+                head_object->next = nullptr;
+                head_object->prev = nullptr;
+
+                delete head_object;
+                head_object = temp_object;
+                size--;
+            }
+        }
+        return 1;
+    }
+
+    bool remove(std::string key) {
+        ListNode<T>* temp_object = head;
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                if (temp_object->key == key) {
+                    if (i == 0 && i == size - 1) {
+                        return del_all();
+                    }
+                    else if (i == 0) {
+                        return del_first();
+                    }
+                    else if (i == size - 1) {
+                        return del_last();
+                    }
+                    else {
+                        delete temp_object;
+                        size--;
+                        return true;
+                    }
+                }
+                temp_object = temp_object->next;
+            }
+        }
+        return false;
+    }
+    bool remove(std::string key, bool isIndicator) {
+        ListNode<T>* temp_object = head;
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                if (temp_object->key == key) {
+                    if (i == 0 && i == size - 1) {
+                        return del_all(isIndicator);
+                    }
+                    else if (i == 0) {
+                        return del_first(isIndicator);
+                    }
+                    else if (i == size - 1) {
+                        return del_last(isIndicator);
+                    }
+                    else {
+                        delete temp_object;
+                        size--;
+                        return true;
+                    }
+                }
+                temp_object = temp_object->next;
+            }
+        }
+        return false;
+    }
+};
