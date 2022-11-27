@@ -17,6 +17,8 @@ public:
     ~ListNode() {
         next = NULL;
         prev = NULL;
+        key = "";
+        value = NULL;
     }
 };
 
@@ -29,6 +31,11 @@ private:
     int size;
 public:
     List() {
+        head = NULL;
+        tail = NULL;
+        size = 0;
+    }
+    ~List() {
         head = NULL;
         tail = NULL;
         size = 0;
@@ -90,6 +97,12 @@ public:
         return 0;
     }
 
+    ListNode<T>* getRehash() {
+        ListNode<T>* temp_object = tail;
+        tail = temp_object->prev;
+        return temp_object;
+    }
+
     bool del_first(bool isIndicator) {
         if (size == 0) {
             return 0;
@@ -118,7 +131,7 @@ public:
             head_object->prev = nullptr;
 
             if (isIndicator == true) {
-                delete head_object->data;
+                delete head_object->value;
             }
             delete head_object;
             size--;
@@ -173,7 +186,7 @@ public:
             tail_object->prev = nullptr;
 
             if (isIndicator == true) {
-                delete tail_object->data;
+                delete tail_object->value;
             }
             delete tail_object;
             size--;
@@ -219,9 +232,9 @@ public:
 
                 head_object->next = nullptr;
                 head_object->prev = nullptr;
-                /*if (isIndicator == true) {
-                    delete head_object->data;
-                }*/
+                if (isIndicator == true) {
+                    delete head_object->value;
+                }
                 delete head_object;
                 head_object = temp_object;
                 size--;

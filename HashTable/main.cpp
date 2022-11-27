@@ -110,15 +110,37 @@ public:
     void resize() {
         capacity *= 2;
         List<T>* temp_array = new List<T>[capacity];
-
-        //TODO: funkcja rehashująca
-
         for (int i = 0; i < capacity; i++) {
             List<T>* list = new List<T>();
-            dArray[i] = *list;
+            temp_array[i] = *list;
         }
+        rehash(temp_array);
+
         delete[] dArray;
         dArray = temp_array;
+    }
+    void rehash(List<T>* temp_array) {
+        int temp_cap = capacity / 2;
+        size = 0;
+
+        for (int i = 0; i < temp_cap; i++) {
+            if (dArray[i].isEmpty() == 0) {
+                for (int j = 0; j < dArray[i].getSize(); j++) {
+                    ListNode<T>* temp_object = dArray[i].getRehash();
+
+                    ListNode<T>* new_object = temp_array[hashValue(temp_object->key)].get(temp_object->key);
+                    if (new_object == NULL) {
+                        temp_array[hashValue(temp_object->key)].add(temp_object->key, temp_object->value);
+                        size++;
+                    }
+                    else {
+                        temp_array[hashValue(temp_object->key)].overwrite(temp_object->key, temp_object->value);
+                    }
+                }
+            }
+            dArray[i].del_all();
+            dArray[i].~List();
+        }
     }
     void add(std::string key, T value) {
         if (size == 0 && capacity == 0) {
@@ -272,56 +294,29 @@ public:
     }
 
 
-    /*bool change(size_t indeks, T data) {
-        if (indeks < size - 1 && size != 0) {
-            dArray[indeks] = data;
-            return 1;
-        }
-        return 0;
-    }
-
-    T get_index(size_t indeks) {
-        if (size != 0) {
-            if (indeks < size - 1) {
-                return dArray[indeks];
-            }
-        }
-    }
-    bool change(size_t indeks, T data, bool isPointer) {
-        if (indeks < size - 1 && size != 0) {
-            if (isPointer == true) {
-                delete dArray[indeks];
-            }
-            dArray[indeks] = data;
-            return 1;
-        }
-        return 0;
-    }
     void clear() {
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                dArray[i].~T();
-            }
+        for (int i = 0; i < capacity; i++) {
+            dArray[i].del_all();
+            dArray[i].~List();
         }
         size = 0;
-        capacity = 1;
+        capacity = 1024;
         delete[] dArray;
     }
     void clear(bool isPointer) {
-        if (isPointer == true) {
-            if (size > 0) {
-                for (int i = 0; i < size; i++) {
-                    dArray[i].~T();
-                    delete dArray[i];
+        for (int i = 0; i < capacity; i++) {
+            /*if (dArray[i].isEmpty() == 0) {
+                for (int j = 0; j < dArray[i].getSize(); j++) {
+
                 }
-            }
+            }*/
+            dArray[i].del_all(isPointer);
+            dArray[i].~List();
         }
         size = 0;
-        capacity = 1;
+        capacity = 1024;
         delete[] dArray;
     }
-
-    */
 
 
 
@@ -365,14 +360,19 @@ int main()
     for (int i = 0; i < 10; i++) {
         //int randnum = rand() % 1000000 + 1;
         ha->add(randomString(6), i);
-        std::cout << i << std::endl;
     }
-    //ha->add("kotkot", 2022);
-    //ha->add("kotkot", 69);
+    ha->add("kotkot", 2022);
+    ha->add("kotkot", 99);
 
     /*std::cout << ha->get("kotkot") << std::endl;
     std::cout << ha->remove("kotkot") << std::endl;
     std::cout << ha->get("kotkot") << std::endl;*/
 
     std::cout << ha->to_string() << std::endl;
+    std::cout << "RESIZE:::" << std::endl;
+    ha->resize();
+    std::cout << ha->to_string() << std::endl;
+
+
+    ha->clear();
 }
