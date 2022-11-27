@@ -33,6 +33,10 @@ public:
         tail = NULL;
         size = 0;
     }
+    int getSize() {
+        return size;
+    }
+
     void add(std::string key, T value) {
         ListNode<T>* new_object = new ListNode<T>;
         new_object->key = key;
@@ -52,6 +56,20 @@ public:
         }
         size++;
     }
+    void overwrite(std::string key, T value) {
+        ListNode<T>* temp_object = head;
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                if (temp_object->key == key) {
+                    temp_object->value = value;
+                    return;
+                }
+                temp_object = temp_object->next;
+            }
+        }
+        return;
+    }
+
     ListNode<T>* get(std::string key) {
         ListNode<T>* temp_object = head;
         if (size != 0) {
@@ -64,6 +82,12 @@ public:
             }
         }
         return NULL;
+    }
+    bool isEmpty() {
+        if (head == NULL && tail == NULL) {
+            return 1;
+        }
+        return 0;
     }
 
     bool del_first(bool isIndicator) {
@@ -278,5 +302,48 @@ public:
             }
         }
         return false;
+    }
+
+    std::string to_string() {
+        std::ostringstream temp;
+        try {
+            ListNode<T>* temp_object = head;
+
+            if (size != 0) {
+                while (temp_object) {
+                    temp << temp_object->key + " -> " + std::to_string(temp_object->value) + ", ";
+                    temp_object = temp_object->next;
+                }
+            }
+            else {
+                throw 1;
+            }
+        }
+        catch (...) {
+            temp << "Brak rekordow!\n";
+        }
+        return temp.str();
+    }
+    std::string to_string(std::string(*data_to_str)(T)) {
+        std::ostringstream temp;
+        try {
+            ListNode<T>* temp_object = head;
+
+            if (size != 0) {
+                if (data_to_str) {
+                    while (temp_object) {
+                        temp << temp_object->key + " -> " + data_to_str(temp_object->value) << ", ";
+                        temp_object = temp_object->next;
+                    }
+                }
+            }
+            else {
+                throw 1;
+            }
+        }
+        catch (...) {
+            temp << "Brak rekordow!\n";
+        }
+        return temp.str();
     }
 };

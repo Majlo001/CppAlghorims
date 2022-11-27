@@ -67,7 +67,14 @@ std::string just_str(std::string str) {
     return str;
 }
 
-
+//template<typename T>
+//std::string not_str(ListNode<T> node) {
+//    return node.key + " -> " + std::to_string(node.value);
+//}
+//template<typename T>
+//std::string just_str(ListNode<T> node) {
+//    return node.key + " -> " + node.value;
+//}
 
 
 /* ==== HASH TABLE ==== */
@@ -122,13 +129,19 @@ public:
                 List<T>* list = new List<T>();
                 dArray[i] = *list;
             }
-            return;
         }
         if (size/capacity >= 0.75) {
             resize();
         }
-        dArray[hashValue(key)].add(key, value);
-        size++;
+
+        ListNode<T>* temp_object = dArray[hashValue(key)].get(key);
+        if (temp_object == NULL) {
+            dArray[hashValue(key)].add(key, value);
+            size++;
+        }
+        else {
+            dArray[hashValue(key)].overwrite(key, value);
+        }
     }
 
     ListNode<T>* get(std::string key) {
@@ -141,6 +154,123 @@ public:
     bool remove(std::string key) {
         return dArray[hashValue(key)].remove(key);
     }
+
+    std::string to_string() {
+        std::ostringstream os;
+        try {
+            if (size != 0) {
+                for (int i = 0; i < capacity; i++) {
+                    if (dArray[i].isEmpty() == 0) {
+                        os << std::to_string(i) << ": " << dArray[i].to_string() << "\n";
+                    }
+                }
+                os << getStats();
+            }
+            else throw 1;
+        }
+        catch (...) {
+            os << "Wszystkie listy puste!\n";
+        }
+        return os.str();
+    }
+    std::string to_string(int count) {
+        std::ostringstream os;
+        try {
+            if (size != 0) {
+                if (count > size) {
+                    count = size;
+                }
+                for (int i = 0; i < capacity; i++) {
+                    if (dArray[i].isEmpty() == 0 && count != 0) {
+                        os << std::to_string(i) << ": " << dArray[i].to_string() << "\n";
+                        count--;
+                    }
+                }
+                os << "...\n";
+                os << getStats();
+            }
+            else throw 1;
+        }
+        catch (...) {
+            os << "Wszystkie listy puste!\n";
+        }
+        return os.str();
+    }
+    std::string to_string(std::string(*data_to_str)(T)) {
+        std::ostringstream os;
+        try {
+            if (size != 0) {
+                for (int i = 0; i < capacity; i++) {
+                    if (dArray[i].isEmpty() == 0) {
+                        if (data_to_str) {
+                            os << std::to_string(i) << ": " << dArray[i].to_string(data_to_str) << "\n";
+                        }
+                    }
+                }
+                os << getStats();
+            }
+            else throw 1;
+        }
+        catch (...) {
+            os << "Wszystkie listy puste!\n";
+        }
+        return os.str();
+    }
+    std::string to_string(std::string(*data_to_str)(T), int count) {
+        std::ostringstream os;
+        try {
+            if (size != 0) {
+                if (count > size) {
+                    count = size;
+                }
+                for (int i = 0; i < capacity; i++) {
+                    if (dArray[i].isEmpty() == 0 && count != 0) {
+                        if (data_to_str) {
+                            os << std::to_string(i) << ": " << dArray[i].to_string(data_to_str) << "\n";
+                        }
+                        count--;
+                    }
+                }
+                os << "...\n";
+                os << getStats();
+            }
+            else throw 1;
+        }
+        catch (...) {
+            os << "Brak rekordow!\n";
+        }
+        return os.str();
+    }
+
+    std::string getStats() {
+        std::ostringstream os;
+        int min = 1000;
+        int max = 0;
+        int nonNull = 0;
+
+        for (int i = 0; i < capacity; i++) {
+            if (dArray[i].isEmpty() == 0) {
+                if (dArray[i].getSize() < min) {
+                    min = dArray[i].getSize();
+                }
+                if (dArray[i].getSize() > max) {
+                    max = dArray[i].getSize();
+                }
+                nonNull++;
+            }
+        }
+
+        double avgSize = getSize() / nonNull;
+
+        os << "stats:\n";
+        os << "list min size: " << std::to_string(min) << "\n";
+        os << "list max size: " << std::to_string(max) << "\n";
+        os << "non-null lists: " << std::to_string(nonNull) << "\n";
+        os << "list avg size: " << std::to_string(avgSize) << "\n";
+
+        return os.str();
+    }
+
 
     /*bool change(size_t indeks, T data) {
         if (indeks < size - 1 && size != 0) {
@@ -191,43 +321,7 @@ public:
         delete[] dArray;
     }
 
-    std::string to_string(std::string(*data_to_str)(T)) {
-        std::ostringstream os;
-        try {
-            if (size != 0) {
-                for (int i = 0; i < size; i++) {
-                    if (data_to_str) {
-                        os << data_to_str(dArray[i]) << "\n";
-                    }
-                }
-            }
-            else throw 1;
-        }
-        catch (...) {
-            os << "Brak rekordow!\n";
-        }
-        return os.str();
-    }
-    std::string to_string(std::string(*data_to_str)(T), int count) {
-        std::ostringstream os;
-        try {
-            if (size != 0) {
-                if (count > size) {
-                    count = size;
-                }
-                for (int i = 0; i < count; i++) {
-                    if (data_to_str) {
-                        os << data_to_str(dArray[i]) << "\n";
-                    }
-                }
-            }
-            else throw 1;
-        }
-        catch (...) {
-            os << "Brak rekordow!\n";
-        }
-        return os.str();
-    }*/
+    */
 
 
 
@@ -256,7 +350,6 @@ std::string randomString(int len) {
     for (int i = 0; i < len; ++i) {
         tmp += chars[rand() % (sizeof(chars) - 1)];
     }
-
     return tmp;
 }
 
@@ -270,12 +363,16 @@ int main()
     HashTable<int>* ha = new HashTable<int>();
 
     for (int i = 0; i < 10; i++) {
-        int randnum = rand() % 1000000 + 1;
+        //int randnum = rand() % 1000000 + 1;
         ha->add(randomString(6), i);
+        std::cout << i << std::endl;
     }
-    ha->add("kotkot", 2022);
+    //ha->add("kotkot", 2022);
+    //ha->add("kotkot", 69);
 
-    std::cout << ha->get("kotkot") << std::endl;
+    /*std::cout << ha->get("kotkot") << std::endl;
     std::cout << ha->remove("kotkot") << std::endl;
-    std::cout << ha->get("kotkot") << std::endl;
+    std::cout << ha->get("kotkot") << std::endl;*/
+
+    std::cout << ha->to_string() << std::endl;
 }
