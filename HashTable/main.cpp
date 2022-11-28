@@ -158,7 +158,7 @@ public:
 
         ListNode<T>* temp_object = dArray[hashValue(key)].get(key);
         if (temp_object == NULL) {
-            dArray[hashValue(key)].add(key, value);
+            dArray[hashValue(key)].add_order(key, value);
             size++;
         }
         else {
@@ -181,6 +181,9 @@ public:
         std::ostringstream os;
         try {
             if (size != 0) {
+                os << "current_size: " << size << "\n";
+                os << "max_size: " << capacity << "\n";
+                os << "table:\n";
                 for (int i = 0; i < capacity; i++) {
                     if (dArray[i].isEmpty() == 0) {
                         os << std::to_string(i) << ": " << dArray[i].to_string() << "\n";
@@ -199,6 +202,9 @@ public:
         std::ostringstream os;
         try {
             if (size != 0) {
+                os << "current_size: " << size << "\n";
+                os << "max_size: " << capacity << "\n";
+                os << "table:\n";
                 if (count > size) {
                     count = size;
                 }
@@ -222,6 +228,9 @@ public:
         std::ostringstream os;
         try {
             if (size != 0) {
+                os << "current_size: " << size << "\n";
+                os << "max_size: " << capacity << "\n";
+                os << "table:\n";
                 for (int i = 0; i < capacity; i++) {
                     if (dArray[i].isEmpty() == 0) {
                         if (data_to_str) {
@@ -242,6 +251,9 @@ public:
         std::ostringstream os;
         try {
             if (size != 0) {
+                os << "current_size: " << size << "\n";
+                os << "max_size: " << capacity << "\n";
+                os << "table:\n";
                 if (count > size) {
                     count = size;
                 }
@@ -302,6 +314,12 @@ public:
         size = 0;
         capacity = 1024;
         delete[] dArray;
+
+        dArray = new List<T>[capacity];
+        for (int i = 0; i < capacity; i++) {
+            List<T>* list = new List<T>();
+            dArray[i] = *list;
+        }
     }
     void clear(bool isPointer) {
         for (int i = 0; i < capacity; i++) {
@@ -316,6 +334,12 @@ public:
         size = 0;
         capacity = 1024;
         delete[] dArray;
+
+        dArray = new List<T>[capacity];
+        for (int i = 0; i < capacity; i++) {
+            List<T>* list = new List<T>();
+            dArray[i] = *list;
+        }
     }
 
 
@@ -353,26 +377,73 @@ std::string randomString(int len) {
 
 
 
+//int main()
+//{
+//    HashTable<int>* ha = new HashTable<int>();
+//
+//    for (int i = 0; i < 10; i++) {
+//        //int randnum = rand() % 1000000 + 1;
+//        ha->add(randomString(6), i);
+//    }
+//    ha->add("kotkot", 2022);
+//    ha->add("kotkot", 99);
+//
+//    /*std::cout << ha->get("kotkot") << std::endl;
+//    std::cout << ha->remove("kotkot") << std::endl;
+//    std::cout << ha->get("kotkot") << std::endl;*/
+//
+//    std::cout << ha->to_string() << std::endl;
+//    std::cout << "RESIZE:::" << std::endl;
+//    ha->resize();
+//    std::cout << ha->to_string() << std::endl;
+//
+//
+//    ha->clear();
+//}
+
+
 int main()
 {
-    HashTable<int>* ha = new HashTable<int>();
+    const int MAX_ORDER = 7;
+    HashTable<int>* ht = new HashTable<int>();
 
-    for (int i = 0; i < 10; i++) {
-        //int randnum = rand() % 1000000 + 1;
-        ha->add(randomString(6), i);
+    for (int o = 1; o <= MAX_ORDER; o++)
+    {
+        const int n = pow(10, o);
+
+        clock_t t1 = clock();
+        for (int i = 0; i < n; i++)
+        {
+            ht->add(randomString(6), i);
+        }
+        clock_t t2 = clock();
+        /*double calc = log2((double)bst->getSize() + 1);
+
+        std::cout << "Wielkosc drzewa: " << bst->getSize() << std::endl;
+        std::cout << "Wysokosc drzewa: " << bst->getHeight() << std::endl;
+        std::cout << "Obliczenia: " << calc << std::endl;
+        std::cout << "Wyskosc/Obliczenia: " << bst->getHeight() / calc << std::endl;*/
+        std::cout << ht->to_string(16) << std::endl;
+
+        double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+        std::cout << "Pomiar czasowy dodawania: " << time << "s dla 10^" << o << " elementow." << std::endl;
+        std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+
+        /*const int m = pow(10, 4);
+        int hits = 0;
+        t1 = clock();
+
+        for (int i = 0; i < m; i++){
+            ListNode<int>* entry = ht->get(randomString(6));
+            if (entry != NULL) hits++;
+        }
+        t2 = clock();
+
+        time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+        std::cout << "Ilosc trafien: " << std::to_string(hits) << std::endl;
+        std::cout << "Pomiar czasowy szukania: " << time << "s dla 10^" << o << " elementow.\n\n" << std::endl;*/
+
+        ht->clear();
     }
-    ha->add("kotkot", 2022);
-    ha->add("kotkot", 99);
-
-    /*std::cout << ha->get("kotkot") << std::endl;
-    std::cout << ha->remove("kotkot") << std::endl;
-    std::cout << ha->get("kotkot") << std::endl;*/
-
-    std::cout << ha->to_string() << std::endl;
-    std::cout << "RESIZE:::" << std::endl;
-    ha->resize();
-    std::cout << ha->to_string() << std::endl;
-
-
-    ha->clear();
+    return 0;
 }

@@ -63,6 +63,57 @@ public:
         }
         size++;
     }
+    void add_first(std::string key, T value) {
+        ListNode<T>* new_object = new ListNode<T>;
+        new_object->key = key;
+        new_object->value = value;
+
+        if (size == 0) {
+            head = new_object;
+            tail = new_object;
+            new_object->next = nullptr;
+            new_object->prev = nullptr;
+        }
+        else {
+            ListNode<T>* temp_head = head;
+            head->prev = new_object;
+            new_object->next = temp_head;
+            new_object->prev = nullptr;
+            head = new_object;
+        }
+        size++;
+    }
+    void add_order(std::string key, T value) {
+        ListNode<T>* temp_object = head;
+
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                if (temp_object->key <= key) {
+                    if (i == 0) {
+                        add_first(key, value);
+                        return;
+                    }
+                    ListNode<T>* new_object = new ListNode<T>;
+
+                    new_object->key = key;
+                    new_object->value = value;
+                    new_object->next = temp_object;
+                    new_object->prev = temp_object->prev;
+                    temp_object->prev->next = new_object;
+                    temp_object->prev = new_object;
+                    return;
+                }
+                temp_object = temp_object->next;
+            }
+            add(key, value);
+            return;
+        }
+        else {
+            add_first(key, value);
+            return;
+        }
+        size++;
+    }
     void overwrite(std::string key, T value) {
         ListNode<T>* temp_object = head;
         if (size != 0) {
@@ -82,7 +133,6 @@ public:
         if (size != 0) {
             for (int i = 0; i < size; i++) {
                 if (key == temp_object->key) {
-                    std::cout << temp_object->key << " " << temp_object->value << std::endl;
                     return temp_object;
                 }
                 temp_object = temp_object->next;
