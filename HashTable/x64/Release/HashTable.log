@@ -1,31 +1,30 @@
 ﻿  main.cpp
-Z:\ZUT_Algorithms2\HashTable\main.cpp(412,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(412,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(209,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(201): message : while compiling class template member function 'std::string HashTable<int>::to_string(int)'
-Z:\ZUT_Algorithms2\HashTable\main.cpp(426): message : see reference to function template instantiation 'std::string HashTable<int>::to_string(int)' being compiled
-Z:\ZUT_Algorithms2\HashTable\main.cpp(408): message : see reference to class template instantiation 'HashTable<int>' being compiled
-Z:\ZUT_Algorithms2\HashTable\main.cpp(349,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(347): message : while compiling class template member function 'int HashTable<int>::hashValue(std::string)'
-Z:\ZUT_Algorithms2\HashTable\main.cpp(159): message : see reference to function template instantiation 'int HashTable<int>::hashValue(std::string)' being compiled
-Z:\ZUT_Algorithms2\HashTable\main.cpp(353,1): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(297,24): warning C4244: 'initializing': conversion from 'size_t' to 'double', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(279): message : while compiling class template member function 'std::string HashTable<int>::getStats(void)'
-Z:\ZUT_Algorithms2\HashTable\main.cpp(218): message : see reference to function template instantiation 'std::string HashTable<int>::getStats(void)' being compiled
-Z:\ZUT_Algorithms2\HashTable\main.cpp(123,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\HashTable\main.cpp(122): message : while compiling class template member function 'void HashTable<int>::rehash(List<T> *)'
+Z:\ZUT_Algorithms2\HashTable\main.cpp(403,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(403,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(418,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(418,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(200,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(192): message : while compiling class template member function 'std::string HashTable<int>::to_string(int)'
+Z:\ZUT_Algorithms2\HashTable\main.cpp(412): message : see reference to function template instantiation 'std::string HashTable<int>::to_string(int)' being compiled
+Z:\ZUT_Algorithms2\HashTable\main.cpp(399): message : see reference to class template instantiation 'HashTable<int>' being compiled
+Z:\ZUT_Algorithms2\HashTable\main.cpp(340,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(338): message : while compiling class template member function 'int HashTable<int>::hashValue(std::string)'
+Z:\ZUT_Algorithms2\HashTable\main.cpp(162): message : see reference to function template instantiation 'int HashTable<int>::hashValue(std::string)' being compiled
+Z:\ZUT_Algorithms2\HashTable\main.cpp(344,1): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(114,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\HashTable\main.cpp(113): message : while compiling class template member function 'void HashTable<int>::rehash(List<T> *)'
           with
           [
               T=int
           ]
-Z:\ZUT_Algorithms2\HashTable\main.cpp(117): message : see reference to function template instantiation 'void HashTable<int>::rehash(List<T> *)' being compiled
+Z:\ZUT_Algorithms2\HashTable\main.cpp(108): message : see reference to function template instantiation 'void HashTable<int>::rehash(List<T> *)' being compiled
           with
           [
               T=int
           ]
   Generating code
-  2 of 229 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+  1 of 234 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   HashTable.vcxproj -> Z:\ZUT_Algorithms2\x64\Release\HashTable.exe

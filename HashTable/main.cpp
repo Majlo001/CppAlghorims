@@ -67,15 +67,6 @@ std::string just_str(std::string str) {
     return str;
 }
 
-//template<typename T>
-//std::string not_str(ListNode<T> node) {
-//    return node.key + " -> " + std::to_string(node.value);
-//}
-//template<typename T>
-//std::string just_str(ListNode<T> node) {
-//    return node.key + " -> " + node.value;
-//}
-
 
 /* ==== HASH TABLE ==== */
 template<typename T>
@@ -294,7 +285,7 @@ public:
             }
         }
 
-        double avgSize = getSize() / nonNull;
+        double avgSize = (double)size / (double)nonNull;
 
         os << "stats:\n";
         os << "list min size: " << std::to_string(min) << "\n";
@@ -417,19 +408,14 @@ int main()
             ht->add(randomString(6), i);
         }
         clock_t t2 = clock();
-        /*double calc = log2((double)bst->getSize() + 1);
 
-        std::cout << "Wielkosc drzewa: " << bst->getSize() << std::endl;
-        std::cout << "Wysokosc drzewa: " << bst->getHeight() << std::endl;
-        std::cout << "Obliczenia: " << calc << std::endl;
-        std::cout << "Wyskosc/Obliczenia: " << bst->getHeight() / calc << std::endl;*/
         std::cout << ht->to_string(16) << std::endl;
 
         double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
         std::cout << "Pomiar czasowy dodawania: " << time << "s dla 10^" << o << " elementow." << std::endl;
         std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 
-        /*const int m = pow(10, 4);
+        const int m = pow(10, 4);
         int hits = 0;
         t1 = clock();
 
@@ -441,9 +427,10 @@ int main()
 
         time = (t2 - t1) / (double)CLOCKS_PER_SEC;
         std::cout << "Ilosc trafien: " << std::to_string(hits) << std::endl;
-        std::cout << "Pomiar czasowy szukania: " << time << "s dla 10^" << o << " elementow.\n\n" << std::endl;*/
+        std::cout << "Pomiar czasowy szukania: " << time << "s dla 10^" << o << " elementow.\n\n" << std::endl;
 
         ht->clear();
     }
+    delete ht;
     return 0;
 }
