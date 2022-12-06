@@ -88,6 +88,11 @@ private:
     int getRightChild(int i) {
         return (2 * i + 2);
     }
+    void swap(int id, int secondid) {
+        T temp = bHeap[id];
+        bHeap[id] = bHeap[secondid];
+        bHeap[secondid] = temp;
+    }
 
 public:
     BinaryHeap() {
@@ -134,12 +139,8 @@ public:
     }
 
     T poll(int(*data_cmp)(T, T)) {
-        if (size != 0) {
+        if (size > 0) {
             T temp = bHeap[0];
-
-            //je¿eli parmamanet delete
-            /*bHeap[0].~T();
-            delete bHeap[0];*/
 
             bHeap[0] = bHeap[size - 1];
             size--;
@@ -156,9 +157,7 @@ public:
             int parentId = getParent(id);
             int cmp = data_cmp(bHeap[id], bHeap[parentId]);
             if (cmp == 1) {
-                temp = bHeap[id];
-                bHeap[id] = bHeap[parentId];
-                bHeap[parentId] = temp;
+                swap(id, parentId);
                 heapUp(parentId, data_cmp);
             }
         }
@@ -167,30 +166,26 @@ public:
     void heapDown(int id, int(*data_cmp)(T, T)) {
         if (size - 1 < getLeftChild(id)) return;
         if (id < size) {
-            T temp;
             int leftChildId = getLeftChild(id);
             int cmp = data_cmp(bHeap[leftChildId], bHeap[leftChildId + 1]);
             if (cmp == 1 || cmp == 0) {
                 cmp = data_cmp(bHeap[id], bHeap[leftChildId]);
                 if (cmp == -1) {
-                    temp = bHeap[id];
-                    bHeap[id] = bHeap[leftChildId];
-                    bHeap[leftChildId] = temp;
+                    swap(id, leftChildId);
                     heapDown(leftChildId, data_cmp);
                 }
             }
+            //else if (cmp == -1) {
             else {
                 cmp = data_cmp(bHeap[id], bHeap[leftChildId+1]);
                 if (cmp == -1) {
-                    temp = bHeap[id];
-                    bHeap[id] = bHeap[leftChildId + 1];
-                    bHeap[leftChildId + 1] = temp;
+                    swap(id, leftChildId + 1);
                     heapDown(leftChildId + 1, data_cmp);
                 }
             }
-            //else {
-            //    //Powtórzenie here
-            //}
+            /*else {
+                
+            }*/
         }
         return;
     }
@@ -244,6 +239,7 @@ public:
         size = 0;
         capacity = 1;
         delete[] bHeap;
+        bHeap = new T[capacity];
     }
     void clear(bool isPointer) {
         if (isPointer == true) {
@@ -257,9 +253,9 @@ public:
         size = 0;
         capacity = 1;
         delete[] bHeap;
+        bHeap = new T[capacity];
     }
 };
-
 
 
 int main()
@@ -267,19 +263,39 @@ int main()
     const int MAX_ORDER = 7;
     BinaryHeap<Person*>* bh = new BinaryHeap<Person*>();
 
-    bh->add(new Person(23, "Adam", "Adamiak", 1000), person_cmp);
-    bh->add(new Person(35, "Adam", "Adamiak", 1000), person_cmp);
-    bh->add(new Person(21, "Adam", "Adamiak", 1000), person_cmp);
-    bh->add(new Person(9, "Adam", "Adamiak", 1000), person_cmp);
-    bh->add(new Person(60, "Adam", "Adamiak", 1000), person_cmp);
-    bh->add(new Person(69, "Adam", "Adamiak", 1000), person_cmp);
-    bh->add(new Person(62, "Adam", "Adamiak", 1000), person_cmp);
+    for (int o = 1; o <= MAX_ORDER; o++)
+    {
+        const int n = pow(10, o);
 
-    std::cout << bh->to_string(person_to_str) << std::endl;
-    std::cout << bh->poll(person_cmp) << std::endl;
-    std::cout << bh->to_string(person_to_str) << std::endl;
+        clock_t t1 = clock();
+        for (int i = 0; i < n; i++)
+        {
+            int pesel = (rand() << 15) + rand();
+            bh->add(new Person(pesel, "Adam", "Adamiak", 1000 + i), person_cmp);
+        }
+        clock_t t2 = clock();
+        std::cout << bh->to_string(person_to_str, 15) << std::endl;
 
+        double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+        std::cout << "Pomiar czasowy dodawania: " << time << "s dla 10^" << o << " elementow." << std::endl;
 
-    bh->clear(true);
+        const int m = pow(10, 4);
+        t1 = clock();
+
+        for (int i = 0; i < m; i++)
+        {
+            Person* polled = bh->poll(person_cmp);
+            delete polled;
+        }
+        t2 = clock();
+        std::cout << bh->to_string(person_to_str, 15) << std::endl;
+        time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+        std::cout << "Pomiar czasowy polla: " << time << "s" << std::endl;
+
+        time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+
+        bh->clear(true);
+    }
+    delete bh;
     return 0;
 }
