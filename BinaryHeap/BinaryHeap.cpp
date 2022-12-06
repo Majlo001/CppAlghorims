@@ -168,6 +168,7 @@ public:
         if (id < size) {
             int leftChildId = getLeftChild(id);
             int cmp = data_cmp(bHeap[leftChildId], bHeap[leftChildId + 1]);
+            //if (cmp == 1) {
             if (cmp == 1 || cmp == 0) {
                 cmp = data_cmp(bHeap[id], bHeap[leftChildId]);
                 if (cmp == -1) {
@@ -184,7 +185,32 @@ public:
                 }
             }
             /*else {
-                
+                int rightChildId = id+1;
+                int maxleft;
+                int maxright;
+
+                cmp = data_cmp(bHeap[getLeftChild(leftChildId)], bHeap[getRightChild(leftChildId)]);
+                if (cmp == -1) {
+                    maxleft = getRightChild(leftChildId);
+                } else {
+                    maxleft = getLeftChild(leftChildId);
+                }
+
+                cmp = data_cmp(bHeap[getLeftChild(rightChildId)], bHeap[getRightChild(rightChildId)]);
+                if (cmp == -1) {
+                    maxright = getRightChild(rightChildId);
+                } else {
+                    maxright = getLeftChild(rightChildId);
+                }
+
+                cmp = data_cmp(bHeap[maxleft], bHeap[maxright]);
+                if (cmp == -1) {
+                    swap(id, leftChildId + 1);
+                    heapDown(leftChildId + 1, data_cmp);
+                } else {
+                    swap(id, leftChildId );
+                    heapDown(leftChildId, data_cmp);
+                }
             }*/
         }
         return;
@@ -290,7 +316,7 @@ int main()
         t2 = clock();
         std::cout << bh->to_string(person_to_str, 15) << std::endl;
         time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-        std::cout << "Pomiar czasowy polla: " << time << "s" << std::endl;
+        std::cout << "Pomiar czasowy polla: " << time << "s\n" << std::endl;
 
         time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 

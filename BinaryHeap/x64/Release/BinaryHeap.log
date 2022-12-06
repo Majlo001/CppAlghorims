@@ -1,8 +1,8 @@
 ﻿  BinaryHeap.cpp
-Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(268,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(268,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(282,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(282,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(269,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(269,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(283,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(283,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
 Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(156,15): warning C4101: 'temp': unreferenced local variable
 Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(154): message : while compiling class template member function 'void BinaryHeap<Person *>::heapUp(int,int (__cdecl *)(T,T))'
           with
@@ -14,13 +14,13 @@ Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(137): message : see reference to fu
           [
               T=Person *
           ]
-Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(264): message : see reference to class template instantiation 'BinaryHeap<Person *>' being compiled
+Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(265): message : see reference to class template instantiation 'BinaryHeap<Person *>' being compiled
 Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(83,21): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
 Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(82): message : while compiling class template member function 'int BinaryHeap<Person *>::getParent(int)'
 Z:\ZUT_Algorithms2\BinaryHeap\BinaryHeap.cpp(157): message : see reference to function template instantiation 'int BinaryHeap<Person *>::getParent(int)' being compiled
   Generating code
-  2 of 178 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    17 functions had inline decision re-evaluated but remain unchanged
+  1 of 178 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   BinaryHeap.vcxproj -> Z:\ZUT_Algorithms2\x64\Release\BinaryHeap.exe
