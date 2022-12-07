@@ -149,6 +149,7 @@ public:
             return temp;
         }
         return NULL;
+        //throw std::out_of_range;
     }
 
     void heapUp(int id, int(*data_cmp)(T, T)) {
@@ -163,55 +164,27 @@ public:
         }
         return;
     }
+
     void heapDown(int id, int(*data_cmp)(T, T)) {
-        if (size - 1 < getLeftChild(id)) return;
-        if (id < size) {
-            int leftChildId = getLeftChild(id);
-            int cmp = data_cmp(bHeap[leftChildId], bHeap[leftChildId + 1]);
-            //if (cmp == 1) {
-            if (cmp == 1 || cmp == 0) {
-                cmp = data_cmp(bHeap[id], bHeap[leftChildId]);
-                if (cmp == -1) {
-                    swap(id, leftChildId);
-                    heapDown(leftChildId, data_cmp);
-                }
+        int winner = id;
+        if (getLeftChild(id) < size) {
+            int cmp = data_cmp(bHeap[id], bHeap[getLeftChild(id)]);
+            if (cmp == -1) {
+                winner = getLeftChild(id);
             }
-            //else if (cmp == -1) {
-            else {
-                cmp = data_cmp(bHeap[id], bHeap[leftChildId+1]);
-                if (cmp == -1) {
-                    swap(id, leftChildId + 1);
-                    heapDown(leftChildId + 1, data_cmp);
-                }
+        }
+        if (getRightChild(id) < size) {
+            int cmp;
+            if(winner != id) cmp = data_cmp(bHeap[winner], bHeap[getRightChild(id)]);
+            else cmp = data_cmp(bHeap[id], bHeap[getRightChild(id)]);
+
+            if (cmp == -1) {
+                winner = getRightChild(id);
             }
-            /*else {
-                int rightChildId = id+1;
-                int maxleft;
-                int maxright;
-
-                cmp = data_cmp(bHeap[getLeftChild(leftChildId)], bHeap[getRightChild(leftChildId)]);
-                if (cmp == -1) {
-                    maxleft = getRightChild(leftChildId);
-                } else {
-                    maxleft = getLeftChild(leftChildId);
-                }
-
-                cmp = data_cmp(bHeap[getLeftChild(rightChildId)], bHeap[getRightChild(rightChildId)]);
-                if (cmp == -1) {
-                    maxright = getRightChild(rightChildId);
-                } else {
-                    maxright = getLeftChild(rightChildId);
-                }
-
-                cmp = data_cmp(bHeap[maxleft], bHeap[maxright]);
-                if (cmp == -1) {
-                    swap(id, leftChildId + 1);
-                    heapDown(leftChildId + 1, data_cmp);
-                } else {
-                    swap(id, leftChildId );
-                    heapDown(leftChildId, data_cmp);
-                }
-            }*/
+        }
+        if (winner != id) {
+            swap(id, winner);
+            heapDown(winner, data_cmp);
         }
         return;
     }
@@ -297,7 +270,7 @@ int main()
         for (int i = 0; i < n; i++)
         {
             int pesel = (rand() << 15) + rand();
-            bh->add(new Person(pesel, "Adam", "Adamiak", 1000 + i), person_cmp);
+            bh->add(new Person(pesel, "Adam", "Adamiak", i), person_cmp);
         }
         clock_t t2 = clock();
         std::cout << bh->to_string(person_to_str, 15) << std::endl;
@@ -305,12 +278,12 @@ int main()
         double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
         std::cout << "Pomiar czasowy dodawania: " << time << "s dla 10^" << o << " elementow." << std::endl;
 
-        const int m = pow(10, 4);
         t1 = clock();
 
-        for (int i = 0; i < m; i++)
+        for (int i = 0; i < n; i++)
         {
             Person* polled = bh->poll(person_cmp);
+            std::cout << polled->pesel << std::endl;
             delete polled;
         }
         t2 = clock();
