@@ -137,9 +137,14 @@ public:
     void sort(int(*data_cmp)(T, T)) {
         int n = size;
         for (int i = 0; i < n; i++) {
-            //swap(a, 0, size-1)
+            swap(0, size - 1);
             size--;
             heapDown(0, data_cmp);
+        }
+        size = n;
+
+        for (int i = 0; i < floor(n/2); i++) {
+            swap(i, (size - i - 1));
         }
     }
 

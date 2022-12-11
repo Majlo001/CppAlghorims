@@ -45,12 +45,12 @@ public:
     void add(T value) {
         ListNode<T>* new_object = new ListNode<T>;
         new_object->value = value;
-        new_object->next = NULL;
-        new_object->prev = NULL;
 
         if (size == 0) {
             head = new_object;
             tail = new_object;
+            new_object->next = nullptr;
+            new_object->prev = nullptr;
         }
         else {
             ListNode<T>* temp_object = tail;
@@ -96,6 +96,7 @@ public:
                     new_object->prev = temp_object->prev;
                     temp_object->prev->next = new_object;
                     temp_object->prev = new_object;
+                    size++;
                     return;
                 }
                 temp_object = temp_object->next;
@@ -104,7 +105,7 @@ public:
             return;
         }
         else {
-            add_first(value);
+            add(value);
             return;
         }
         size++;
@@ -140,6 +141,13 @@ public:
             return 1;
         }
         return 0;
+    }
+
+    T get() {
+        ListNode<T>* temp_object = head;
+        T tempValue = temp_object->value;
+        del_first();
+        return tempValue;
     }
 
     ListNode<T>* getRehash() {
@@ -369,7 +377,7 @@ public:
 
             if (size != 0) {
                 while (temp_object) {
-                    temp << temp_object->key + " -> " + std::to_string(temp_object->value) + ", ";
+                    temp << std::to_string(temp_object->value) + ", ";
                     temp_object = temp_object->next;
                 }
             }
@@ -378,7 +386,7 @@ public:
             }
         }
         catch (...) {
-            temp << "Brak rekordow!\n";
+            temp << "Brak rekordow!";
         }
         return temp.str();
     }
