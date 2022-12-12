@@ -7,12 +7,12 @@
 
 class Person {
 public:
-    int pesel;
-    std::string imie;
+    double pesel;
+    char imie;
     std::string nazwisko;
     int rok_urodzenia;
 
-    Person(int pesel, std::string imie, std::string nazwisko, int rok_urodzenia) {
+    Person(double pesel, char imie, std::string nazwisko, int rok_urodzenia) {
         this->pesel = pesel;
         this->imie = imie;
         this->nazwisko = nazwisko;
@@ -20,8 +20,8 @@ public:
     }
     Person() {}
     ~Person() {
-        pesel = 0;
-        imie = "";
+        pesel = 0.0;
+        imie = ' ';
         nazwisko = "";
         rok_urodzenia = 0;
     }
@@ -50,12 +50,18 @@ int person_cmp(Person* p1, Person* p2) {
     else return 1;
 }
 
+int person_key_double(Person p) {
+    return p.pesel;
+}
+int person_key_double(Person* p) {
+    return p->pesel;
+}
 
 std::string person_to_str(Person p) {
-    return "[" + p.imie + " " + p.nazwisko + " " + std::to_string(p.pesel) + " " + std::to_string(p.rok_urodzenia) + "]";
+    return "[" + std::to_string(p.imie) + " " + p.nazwisko + " " + std::to_string(p.pesel) + " " + std::to_string(p.rok_urodzenia) + "]";
 }
 std::string person_to_str(Person* p) {
-    return "[" + p->imie + " " + p->nazwisko + " " + std::to_string(p->pesel) + " " + std::to_string(p->rok_urodzenia) + "]";
+    return "[" + std::to_string(p->imie) + " " + p->nazwisko + " " + std::to_string(p->pesel) + " " + std::to_string(p->rok_urodzenia) + "]";
 }
 
 
@@ -76,7 +82,6 @@ private:
     T* bHeap;
     int size;
     int capacity;
-
 
     int getParent(int i) {
         return floor((i - 1) / 2);

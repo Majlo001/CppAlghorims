@@ -110,6 +110,38 @@ public:
         }
         size++;
     }
+    void add_order(T value, int (*data_cmp)(T, T)) {
+        ListNode<T>* temp_object = head;
+
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                int cmp = data_cmp(value, temp_object->value);
+                if (cmp == -1 || cmp == 0) {
+                    if (i == 0) {
+                        add_first(value);
+                        return;
+                    }
+                    ListNode<T>* new_object = new ListNode<T>;
+
+                    new_object->value = value;
+                    new_object->next = temp_object;
+                    new_object->prev = temp_object->prev;
+                    temp_object->prev->next = new_object;
+                    temp_object->prev = new_object;
+                    size++;
+                    return;
+                }
+                temp_object = temp_object->next;
+            }
+            add(value);
+            return;
+        }
+        else {
+            add(value);
+            return;
+        }
+        size++;
+    }
     void overwrite(std::string key, T value) {
         ListNode<T>* temp_object = head;
         if (size != 0) {
@@ -398,7 +430,7 @@ public:
             if (size != 0) {
                 if (data_to_str) {
                     while (temp_object) {
-                        temp << temp_object->key + " -> " + data_to_str(temp_object->value) << ", ";
+                        temp << data_to_str(temp_object->value) << ", ";
                         temp_object = temp_object->next;
                     }
                 }
