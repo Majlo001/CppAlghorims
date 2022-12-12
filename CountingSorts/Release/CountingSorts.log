@@ -1,0 +1,22 @@
+﻿  CountingSorts.cpp
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(50,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(189,15): warning C4101: 'temp': unreferenced local variable
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(187): message : while compiling class template member function 'void BinaryHeap<int>::heapUp(int,int (__cdecl *)(T,T))'
+          with
+          [
+              T=int
+          ]
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(99): message : see reference to function template instantiation 'void BinaryHeap<int>::heapUp(int,int (__cdecl *)(T,T))' being compiled
+          with
+          [
+              T=int
+          ]
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(132): message : see reference to class template instantiation 'BinaryHeap<int>' being compiled
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(82,21): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(81): message : while compiling class template member function 'int BinaryHeap<int>::getParent(int)'
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(190): message : see reference to function template instantiation 'int BinaryHeap<int>::getParent(int)' being compiled
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 107 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  CountingSorts.vcxproj -> Z:\ZUT_Algorithms2\Release\CountingSorts.exe

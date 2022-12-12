@@ -1,0 +1,10 @@
+﻿  RedBlackTree.cpp
+Z:\ZUT_Algorithms2\RedBlackTree\RedBlackTree.cpp(608,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\RedBlackTree\RedBlackTree.cpp(608,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+Z:\ZUT_Algorithms2\RedBlackTree\RedBlackTree.cpp(629,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\RedBlackTree\RedBlackTree.cpp(629,21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 189 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  RedBlackTree.vcxproj -> Z:\ZUT_Algorithms2\x64\Release\RedBlackTree.exe

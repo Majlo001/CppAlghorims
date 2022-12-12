@@ -39,15 +39,16 @@ void countingSort(int* array, int n, const int m) {
 void bucketSort(int* array, int n, const int m) {
 	int w = m / n;
 	//std::cout << w << " " << n << " " << m << std::endl;
-	List<int>* newArray = new List<int>[w];
+	List<int>* newArray = new List<int>[n];
 
-	for (int i = 0; i < w; i++) {
+	for (int i = 0; i < n; i++) {
 		List<int>* list = new List<int>();
 		newArray[i] = *list;
 	}
 	for (int i = 0; i < n; i++) {
 		int index = 0;
 		if (w > 1) index = floor(array[i] / w);
+		//std::cout << "Index " << i << ": " << array[i] << " " << index << std::endl;
 		newArray[index].add_order(array[i]);
 	}
 
@@ -95,67 +96,67 @@ bool arraysEqual(T* array1, T* array2, const int n, int(*data_cmp)(T, T)) {
 
 
 
-int main()
+
+
+void main_ints()
 {
 	srand(0);
 	const int MAX_ORDER = 7;
-	const int m = (int)pow(10, 2);
+	const int m = (int)pow(10, 7);
+	for (int o = 1; o <= MAX_ORDER; o++)
+	{
+		const int n = (int)pow(10, o);
+		int* array1 = new int[n];
+		for (int i = 0; i < n; i++)
+		{
+			int rand_val = rand() % m;
+			array1[i] = rand_val;
+		}
+		//[...] skrotowy wypis tablicy do posortowania ( np . pewna liczba poczatkowych elementow )
+
+		int* array2 = new int[n];
+		int* array3 = new int[n];
+		memcpy(array2, array1, n * sizeof(int));
+		memcpy(array3, array1, n * sizeof(int));
+
+		//sortowanie przez zliczanie ( do wykonania w miejscu )
+		clock_t t1 = clock();
+		countingSort(array1, n, m);
+		clock_t t2 = clock();
+
+		double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+		std::cout << "Counting Sort: " << time << "s" << std::endl;
+		//[...] wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
+		
+		t1 = clock();	// sortowanie przez kopcowanie ( do wykonania w miejscu )
+		BinaryHeap<int>* bh = new BinaryHeap<int>(array2, n, normal_cmp, true);
+		bh->sort(normal_cmp);
+		t2 = clock();
+
+		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+		std::cout << "Heapsort: " << time << "s" << std::endl;
 
 
-	const int n = (int)pow(10, 1);
-	int* array1 = new int[n];
+		// wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
+		// sortowanie kubelkowe ( do wykonania w miejscu )
+		t1 = clock();
+		bucketSort(array3, n, m);
+		t2 = clock();
 
-	for (int i = 0; i < n; i++) {
-		//int rand_val = (rand() << 15) + rand();
-		int rand_val = rand() % 100;
-		//std::cout << rand_val << std::endl;
-		array1[i] = rand_val;
+		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+		std::cout << "Bucket Sort: " << time << "s" << std::endl;
+		// wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
+		// sprawdzenie zgodnosci tablic array1 , array2 , array3 i wypis informacji o zgodnosci na
+		
+		delete[] array1;
+		delete[] array2;
+		delete[] array3;
 	}
-
-	int* array2 = new int[n];
-	int* array3 = new int[n];
-	memcpy(array2, array1, n * sizeof(int));
-	memcpy(array3, array1, n * sizeof(int));
-
-	clock_t t1 = clock();
-	countingSort(array1, n, m);
-	clock_t t2 = clock();
-
-	double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-	std::cout << "Counting Sort: " << time << "s" << std::endl;
+}
 
 
-	t1 = clock();
-	BinaryHeap<int>* bh = new BinaryHeap<int>(array2, n, normal_cmp, true);
-	bh->sort(normal_cmp);
-	t2 = clock();
-
-	time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-	std::cout << "Heapsort: " << time << "s" << std::endl;
-
-	//std::cout << std::endl << "Heapsort:" << std::endl;
-	//std::cout << bh->to_string(not_str, n) << std::endl;
-
-	t1 = clock();
-	bucketSort(array3, n, m);
-	t2 = clock();
-
-	time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-	std::cout << "Bucket Sort: " << time << "s" << std::endl;
-
-	/*std::cout << std::endl << "Bucket Sort:" << std::endl;
-	for (int i = 0; i < n; i++) {
-		std::cout << array3[i] << std::endl;
-	}*/
-
-	bool s1 = arraysEqual<int>(array1, array2, n, normal_cmp);
-	bool s2 = arraysEqual<int>(array2, array3, n, normal_cmp);
-	std::cout << s1 << " " << s2 << std::endl;
-
-
-
-	delete[] array1;
-	delete[] array2;
-	delete[] array3;
+int main()
+{
+	main_ints();
 	return 0;
 }
