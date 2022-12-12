@@ -83,7 +83,7 @@ void bucketSort(int* array, int n, const int m) {
 
 
 template<typename T>
-void bucketSort(T* array, int n, double m, int(*key)(T),int(*data_cmp)(T, T)) {
+void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 	double w = m / n;
 	//std::cout << w << " " << n << " " << m << std::endl;
 	List<T>* newArray = new List<T>[n];
@@ -133,7 +133,19 @@ bool arraysEqual(T* array1, T* array2, const int n, int(*data_cmp)(T, T)) {
 	return true;
 }
 
+template<typename T>
+std::string array_to_string(T* array, int n, int max, std::string(*data_to_str)(T)) {
+	std::ostringstream temp;
+	if (n < max) {
+		max = n;
+	}
 
+	for (int i=0; i < max; i++) {
+		temp << data_to_str(array[i]) + "\n";
+	}
+
+	return temp.str();
+}
 
 
 
@@ -148,11 +160,15 @@ void main_ints()
 		int* array1 = new int[n];
 		for (int i = 0; i < n; i++)
 		{
-			int rand_val = rand() % m;
+			//int rand_val = rand() % m;
+			int rand_val = rand();
 			array1[i] = rand_val;
 		}
 		//[...] skrotowy wypis tablicy do posortowania ( np . pewna liczba poczatkowych elementow )
+		std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
 
+
+		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
 		int* array2 = new int[n];
 		int* array3 = new int[n];
 		memcpy(array2, array1, n * sizeof(int));
@@ -166,6 +182,7 @@ void main_ints()
 		double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Counting Sort: " << time << "s" << std::endl;
 		//[...] wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
+		std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
 		
 		t1 = clock();	// sortowanie przez kopcowanie ( do wykonania w miejscu )
 		BinaryHeap<int>* bh = new BinaryHeap<int>(array2, n, normal_cmp, true);
@@ -174,9 +191,9 @@ void main_ints()
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Heapsort: " << time << "s" << std::endl;
+		std::cout << array_to_string(array2, n, 10, not_str) << std::endl;
 
 
-		// wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
 		// sortowanie kubelkowe ( do wykonania w miejscu )
 		t1 = clock();
 		bucketSort(array3, n, m);
@@ -184,7 +201,9 @@ void main_ints()
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Bucket Sort: " << time << "s" << std::endl;
-		// wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
+		std::cout << array_to_string(array3, n, 10, not_str) << std::endl;
+
+
 		// sprawdzenie zgodnosci tablic array1 , array2 , array3 i wypis informacji o zgodnosci na
 		bool s1 = arraysEqual(array1, array2, n, normal_cmp);
 		bool s2 = arraysEqual(array2, array3, n, normal_cmp);
@@ -214,6 +233,8 @@ void main_some_objects() {
 		array1[i] = so;
 	}
 	//[...] skrotowy wypis tablicy do posortowania ( np . pewna liczba poczatkowych elementow )
+
+
 	Person** array2 = new Person*[n];
 	memcpy(array2, array1, n * sizeof(Person*));
 
@@ -246,6 +267,6 @@ void main_some_objects() {
 int main()
 {
 	main_some_objects();
-	//main_ints();
+	main_ints();
 	return 0;
 }
