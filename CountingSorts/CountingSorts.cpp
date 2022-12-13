@@ -28,17 +28,12 @@ void countingSort(int* array, int n, const int m) {
 			}
 		}
 	}
-	//std::cout << std::endl << std::endl;
-	/*for (int i = 0; i < n; i++) {
-		std::cout << array[i] << std::endl;
-	}*/
 
 	delete[] countsArray;
 }
 
 void bucketSort(int* array, int n, const int m) {
 	int w = m / n;
-	//std::cout << w << " " << n << " " << m << std::endl;
 	List<int>* newArray = new List<int>[n];
 
 	for (int i = 0; i < n; i++) {
@@ -48,18 +43,9 @@ void bucketSort(int* array, int n, const int m) {
 	for (int i = 0; i < n; i++) {
 		int index = 0;
 		if (w > 1) index = floor(array[i] / w);
-		//std::cout << "Index " << i << ": " << array[i] << " " << index << std::endl;
 		newArray[index].add_order(array[i]);
 	}
 
-	/*if (w > 1) {
-		for (int i = 0; i < n; i++) {
-			std::cout << newArray[i].to_string() << std::endl;
-		}
-	}
-	else {
-		std::cout << newArray[0].to_string() << std::endl;
-	}*/
 	if (w > 1) {
 		int index = 0;
 		for (int i = n-1; i >= 0; i--) {
@@ -85,7 +71,6 @@ void bucketSort(int* array, int n, const int m) {
 template<typename T>
 void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 	double w = m / n;
-	//std::cout << w << " " << n << " " << m << std::endl;
 	List<T>* newArray = new List<T>[n];
 
 	for (int i = 0; i < n; i++) {
@@ -94,7 +79,6 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 	}
 	for (int i = 0; i < n; i++) {
 		int index = floor(key(array[i]) / w);
-		//std::cout << "Index " << i << ": " << array[i]->pesel << " " << index << std::endl;
 		newArray[index].add_order(array[i], data_cmp);
 	}
 
@@ -113,11 +97,10 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 		//for (int i = 0; i < n; i++) {
 		for (int i = n - 1; i >= 0; i--) {
 			array[i] = newArray[0].get();
-			//std::cout << array[i]->pesel << std::endl;
 		}
 	}
 
-	newArray->del_all();
+	newArray->del_all(true);
 	delete[] newArray;
 }
 
@@ -160,15 +143,13 @@ void main_ints()
 		int* array1 = new int[n];
 		for (int i = 0; i < n; i++)
 		{
-			//int rand_val = rand() % m;
-			int rand_val = rand();
+			int rand_val = (rand() << 7) + rand();
 			array1[i] = rand_val;
 		}
-		//[...] skrotowy wypis tablicy do posortowania ( np . pewna liczba poczatkowych elementow )
+		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
 		std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
 
 
-		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
 		int* array2 = new int[n];
 		int* array3 = new int[n];
 		memcpy(array2, array1, n * sizeof(int));
@@ -181,7 +162,7 @@ void main_ints()
 
 		double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Counting Sort: " << time << "s" << std::endl;
-		//[...] wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
+		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
 		
 		t1 = clock();	// sortowanie przez kopcowanie ( do wykonania w miejscu )
@@ -191,6 +172,7 @@ void main_ints()
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Heapsort: " << time << "s" << std::endl;
+		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array2, n, 10, not_str) << std::endl;
 
 
@@ -201,10 +183,10 @@ void main_ints()
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Bucket Sort: " << time << "s" << std::endl;
+		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array3, n, 10, not_str) << std::endl;
 
 
-		// sprawdzenie zgodnosci tablic array1 , array2 , array3 i wypis informacji o zgodnosci na
 		bool s1 = arraysEqual(array1, array2, n, normal_cmp);
 		bool s2 = arraysEqual(array2, array3, n, normal_cmp);
 		std::cout << "Porownanie: " << s1 << " " << s2 << std::endl;
@@ -222,46 +204,51 @@ void main_some_objects() {
 	const int MAX_ORDER = 7;
 	const double m_double = (double)pow(2, 30);
 
-	/*for (int o = 1; o <= MAX_ORDER; o++){*/
+	for (int o = 1; o <= MAX_ORDER; o++) {
+		const int n = (int)pow(10, o);
+		Person** array1 = new Person * [n];
+		for (int i = 0; i < n; i++)
+		{
+			double pesel = ((rand() << 15) + rand()) / m_double;
+			Person* so = new Person(pesel, "Adam", "Adamiak", i);
+			array1[i] = so;
+		}
+		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
+		std::cout << array_to_string(array1, n, 10, person_to_str) << std::endl;
 
-	const int n = (int)pow(10, 2); // rozmiar tablicy z danymi
-	Person** array1 = new Person*[n];
-	for (int i = 0; i < n; i++)
-	{
-		double pesel = ((rand() << 15) + rand()) / m_double;
-		Person* so = new Person(pesel, ('a' + rand() % 26), "Adamiak", i);
-		array1[i] = so;
+
+		Person** array2 = new Person * [n];
+		memcpy(array2, array1, n * sizeof(Person*));
+
+		// sortowanie przez kopcowanie
+		clock_t t1 = clock();
+		BinaryHeap<Person*>* bh = new BinaryHeap<Person*>(array1, n, person_cmp, true);
+		bh->sort(person_cmp);
+		clock_t t2 = clock();
+		double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+		std::cout << "Heapsort: " << time << "s" << std::endl;
+		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << array_to_string(array1, n, 10, person_to_str) << std::endl;
+		//std::cout << bh->to_string(person_to_str, 15) << std::endl;
+
+
+		// sortowanie kubelkowe ( do wykonania w miejscu )
+		t1 = clock();
+		bucketSort<Person*>(array2, n, 1.0, person_key_double, person_cmp);
+		t2 = clock();
+
+		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+		std::cout << "Bucket Sort: " << time << "s" << std::endl;
+		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << array_to_string(array2, n, 10, person_to_str) << std::endl;
+
+
+		bool s1 = arraysEqual(array1, array2, n, person_cmp);
+		std::cout << "Porownanie: " << s1 << std::endl;
+		std::cout << std::endl;
+		delete[] array1;
+		delete[] array2;
 	}
-	//[...] skrotowy wypis tablicy do posortowania ( np . pewna liczba poczatkowych elementow )
-
-
-	Person** array2 = new Person*[n];
-	memcpy(array2, array1, n * sizeof(Person*));
-
-	// sortowanie przez kopcowanie
-	clock_t t1 = clock();
-	BinaryHeap<Person*>* bh = new BinaryHeap<Person*>(array1, n, person_cmp, true);
-	bh->sort(person_cmp);
-	clock_t t2 = clock();
-	double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-	std::cout << "Heapsort: " << time << "s" << std::endl;
-	std::cout << bh->to_string(person_to_str, 15) << std::endl;
-	// wypis pomiaru czasu i skrotowej postaci wynikowej tablicy
-	
-
-	// sortowanie kubelkowe ( do wykonania w miejscu )
-	t1 = clock();
-	bucketSort<Person*>(array2, n, 1.0, person_key_double, person_cmp);
-	t2 = clock();
-
-	time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-	std::cout << "Bucket Sort: " << time << "s" << std::endl;
-
-
-	bool s1 = arraysEqual(array1, array2, n, person_cmp);
-	std::cout << "Porownanie: " << s1 << std::endl;
-
-	std::cout << std::endl;
 }
 
 int main()

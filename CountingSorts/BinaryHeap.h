@@ -8,11 +8,11 @@
 class Person {
 public:
     double pesel;
-    char imie;
+    std::string imie;
     std::string nazwisko;
     int rok_urodzenia;
 
-    Person(double pesel, char imie, std::string nazwisko, int rok_urodzenia) {
+    Person(double pesel, std::string imie, std::string nazwisko, int rok_urodzenia) {
         this->pesel = pesel;
         this->imie = imie;
         this->nazwisko = nazwisko;
@@ -21,7 +21,7 @@ public:
     Person() {}
     ~Person() {
         pesel = 0.0;
-        imie = ' ';
+        imie = "";
         nazwisko = "";
         rok_urodzenia = 0;
     }
@@ -58,10 +58,10 @@ int person_key_double(Person* p) {
 }
 
 std::string person_to_str(Person p) {
-    return "[" + std::to_string(p.imie) + " " + p.nazwisko + " " + std::to_string(p.pesel) + " " + std::to_string(p.rok_urodzenia) + "]";
+    return "[" + p.imie + " " + p.nazwisko + " " + std::to_string(p.pesel) + " " + std::to_string(p.rok_urodzenia) + "]";
 }
 std::string person_to_str(Person* p) {
-    return "[" + std::to_string(p->imie) + " " + p->nazwisko + " " + std::to_string(p->pesel) + " " + std::to_string(p->rok_urodzenia) + "]";
+    return "[" + p->imie + " " + p->nazwisko + " " + std::to_string(p->pesel) + " " + std::to_string(p->rok_urodzenia) + "]";
 }
 
 
