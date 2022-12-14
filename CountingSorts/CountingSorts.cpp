@@ -19,8 +19,8 @@ void countingSort(int* array, int n, const int m) {
 	}
 
 	int temp = 0;
-	for (int i = m-1; i >= 0; i--) {
-	//for (int i = 0; i < m; i++) {
+	//for (int i = m-1; i >= 0; i--) {
+	for (int i = 0; i < m; i++) {
 		if (countsArray[i] != 0) {
 			for (int j = 0; j < countsArray[i]; j++) {
 				array[temp] = i;
@@ -33,37 +33,38 @@ void countingSort(int* array, int n, const int m) {
 }
 
 void bucketSort(int* array, int n, const int m) {
-	int w = m / n;
+	//double w = m / (double) n;
+	const int w = std::max(m / n, 1);
 	List<int>* newArray = new List<int>[n];
 
+	//for (int i = 0; i < n; i++) {
+	//	List<int>* list = new List<int>();
+	//	newArray[i] = *list;
+	//}
 	for (int i = 0; i < n; i++) {
-		List<int>* list = new List<int>();
-		newArray[i] = *list;
-	}
-	for (int i = 0; i < n; i++) {
-		int index = 0;
-		if (w > 1) index = floor(array[i] / w);
-		newArray[index].add_order(array[i]);
+		const int index = array[i] / w;
+		//newArray[index].add_order(array[i]);
+		newArray[index].add(array[i]);
 	}
 
-	if (w > 1) {
-		int index = 0;
-		for (int i = n-1; i >= 0; i--) {
-		//for (int i = 0; i < n; i++) {
-			int tempSize = newArray[i].getSize();
+	int index = 0;
+	//for (int i = n-1; i >= 0; i--) {
+	for (int i = 0; i < n; i++) {
+		const int tempSize = newArray[i].getSize();
+		if (tempSize == 0)
+			continue;
+		ListNode<int>* temp = newArray[i].head;
+		if (tempSize == 1)
+			array[index++] = temp->value;
+		else
 			for (int j = 0; j < tempSize; j++) {
-				array[index] = newArray[i].get();
-				index++;
+				array[index++] = temp->value;
+				temp = temp->next;
 			}
-		}
-	}
-	else {
-		for (int i = 0; i < n; i++) {
-			array[i] = newArray[0].get();
-		}
+			//array[index++] = newArray[i].get();
 	}
 
-	newArray->del_all();
+	//newArray->del_all();
 	delete[] newArray;
 }
 
@@ -73,10 +74,10 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 	double w = m / n;
 	List<T>* newArray = new List<T>[n];
 
-	for (int i = 0; i < n; i++) {
+	/*for (int i = 0; i < n; i++) {
 		List<T>* list = new List<T>();
 		newArray[i] = *list;
-	}
+	}*/
 	for (int i = 0; i < n; i++) {
 		int index = floor(key(array[i]) / w);
 		newArray[index].add_order(array[i], data_cmp);
@@ -84,8 +85,8 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 
 	if (w > 1) {
 		int index = 0;
-		for (int i = n - 1; i >= 0; i--) {
-			//for (int i = 0; i < n; i++) {
+		//for (int i = n - 1; i >= 0; i--) {
+		for (int i = 0; i < n; i++) {
 			int tempSize = newArray[i].getSize();
 			for (int j = 0; j < tempSize; j++) {
 				array[index] = newArray[i].get();
@@ -94,8 +95,8 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 		}
 	}
 	else {
-		//for (int i = 0; i < n; i++) {
-		for (int i = n - 1; i >= 0; i--) {
+		for (int i = 0; i < n; i++) {
+		//for (int i = n - 1; i >= 0; i--) {
 			array[i] = newArray[0].get();
 		}
 	}
@@ -135,7 +136,7 @@ std::string array_to_string(T* array, int n, int max, std::string(*data_to_str)(
 void main_ints()
 {
 	srand(0);
-	const int MAX_ORDER = 7;
+	const int MAX_ORDER = 6;
 	const int m = (int)pow(10, 7);
 	for (int o = 1; o <= MAX_ORDER; o++)
 	{
@@ -143,7 +144,7 @@ void main_ints()
 		int* array1 = new int[n];
 		for (int i = 0; i < n; i++)
 		{
-			int rand_val = (rand() << 7) + rand();
+			int rand_val = ((rand() << 15) + rand()) % m;
 			array1[i] = rand_val;
 		}
 		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
@@ -253,7 +254,7 @@ void main_some_objects() {
 
 int main()
 {
-	main_some_objects();
 	main_ints();
+	//main_some_objects();
 	return 0;
 }
