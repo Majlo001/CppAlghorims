@@ -41,6 +41,9 @@ public:
     int getSize() {
         return size;
     }
+    ListNode<T>* getHead() {
+        return head;
+    }
 
     void add(T value) {
         ListNode<T>* new_object = new ListNode<T>;
@@ -84,7 +87,7 @@ public:
 
         if (size != 0) {
             for (int i = 0; i < size; i++) {
-                if (temp_object->value <= value) {
+                if (temp_object->value > value) {
                     if (i == 0) {
                         add_first(value);
                         return;
@@ -175,12 +178,6 @@ public:
         return 0;
     }
 
-    T get() {
-        ListNode<T>* temp_object = head;
-        T tempValue = temp_object->value;
-        del_first();
-        return tempValue;
-    }
 
     ListNode<T>* getRehash() {
         ListNode<T>* temp_object = tail;

@@ -147,10 +147,6 @@ public:
             heapDown(0, data_cmp);
         }
         size = n;
-
-        for (int i = 0; i < floor(n/2); i++) {
-            swap(i, (size - i - 1));
-        }
     }
 
     void resize() {

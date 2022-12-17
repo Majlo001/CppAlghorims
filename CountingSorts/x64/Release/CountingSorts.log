@@ -1,9 +1,10 @@
 ﻿  CountingSorts.cpp
 Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(54,13): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
 Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(57,13): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(45,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(194,15): warning C4101: 'temp': unreferenced local variable
-Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(192): message : while compiling class template member function 'void BinaryHeap<Person *>::heapUp(int,int (__cdecl *)(T,T))'
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(41,30): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(41,19): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(190,15): warning C4101: 'temp': unreferenced local variable
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(188): message : while compiling class template member function 'void BinaryHeap<Person *>::heapUp(int,int (__cdecl *)(T,T))'
           with
           [
               T=Person *
@@ -13,14 +14,15 @@ Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(104): message : see reference to f
           [
               T=Person *
           ]
-Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(225): message : see reference to class template instantiation 'BinaryHeap<Person *>' being compiled
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(212): message : see reference to class template instantiation 'BinaryHeap<Person *>' being compiled
 Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(87,21): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
 Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(86): message : while compiling class template member function 'int BinaryHeap<Person *>::getParent(int)'
-Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(195): message : see reference to function template instantiation 'int BinaryHeap<Person *>::getParent(int)' being compiled
-Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(81,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(237): message : see reference to function template instantiation 'void bucketSort<Person*>(T *,int,double,int (__cdecl *)(T),int (__cdecl *)(T,T))' being compiled
+Z:\ZUT_Algorithms2\CountingSorts\BinaryHeap.h(191): message : see reference to function template instantiation 'int BinaryHeap<Person *>::getParent(int)' being compiled
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(70,26): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(224): message : see reference to function template instantiation 'void bucketSort<Person*>(T *,int,double,int (__cdecl *)(T),int (__cdecl *)(T,T))' being compiled
           with
           [
               T=Person *
           ]
+Z:\ZUT_Algorithms2\CountingSorts\CountingSorts.cpp(70,19): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
 LINK : fatal error LNK1104: cannot open file 'Z:\ZUT_Algorithms2\x64\Release\CountingSorts.exe'

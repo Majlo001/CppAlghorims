@@ -19,7 +19,6 @@ void countingSort(int* array, int n, const int m) {
 	}
 
 	int temp = 0;
-	//for (int i = m-1; i >= 0; i--) {
 	for (int i = 0; i < m; i++) {
 		if (countsArray[i] != 0) {
 			for (int j = 0; j < countsArray[i]; j++) {
@@ -33,27 +32,22 @@ void countingSort(int* array, int n, const int m) {
 }
 
 void bucketSort(int* array, int n, const int m) {
-	//double w = m / (double) n;
-	const int w = std::max(m / n, 1);
+	double w = m / (double) n;
+	//const int w = std::max(m / n, 1);
 	List<int>* newArray = new List<int>[n];
 
-	//for (int i = 0; i < n; i++) {
-	//	List<int>* list = new List<int>();
-	//	newArray[i] = *list;
-	//}
+
 	for (int i = 0; i < n; i++) {
 		const int index = array[i] / w;
-		//newArray[index].add_order(array[i]);
-		newArray[index].add(array[i]);
+		newArray[index].add_order(array[i]);
 	}
 
 	int index = 0;
-	//for (int i = n-1; i >= 0; i--) {
 	for (int i = 0; i < n; i++) {
 		const int tempSize = newArray[i].getSize();
 		if (tempSize == 0)
 			continue;
-		ListNode<int>* temp = newArray[i].head;
+		ListNode<int>* temp = newArray[i].getHead();
 		if (tempSize == 1)
 			array[index++] = temp->value;
 		else
@@ -61,47 +55,39 @@ void bucketSort(int* array, int n, const int m) {
 				array[index++] = temp->value;
 				temp = temp->next;
 			}
-			//array[index++] = newArray[i].get();
 	}
 
-	//newArray->del_all();
 	delete[] newArray;
 }
 
 
 template<typename T>
 void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
-	double w = m / n;
+	double w = m / (double) n;
 	List<T>* newArray = new List<T>[n];
 
-	/*for (int i = 0; i < n; i++) {
-		List<T>* list = new List<T>();
-		newArray[i] = *list;
-	}*/
 	for (int i = 0; i < n; i++) {
-		int index = floor(key(array[i]) / w);
+		const int index = floor(key(array[i]) / w);
+		//const int index = key(array[i]) / w;
 		newArray[index].add_order(array[i], data_cmp);
 	}
 
-	if (w > 1) {
-		int index = 0;
-		//for (int i = n - 1; i >= 0; i--) {
-		for (int i = 0; i < n; i++) {
-			int tempSize = newArray[i].getSize();
+	int index = 0;
+	for (int i = 0; i < n; i++) {
+		const int tempSize = newArray[i].getSize();
+		if (tempSize == 0)
+			continue;
+		ListNode<T>* temp = newArray[i].getHead();
+		if (tempSize == 1)
+			array[index++] = temp->value;
+		else
 			for (int j = 0; j < tempSize; j++) {
-				array[index] = newArray[i].get();
-				index++;
+				array[index++] = temp->value;
+				temp = temp->next;
 			}
-		}
-	}
-	else {
-		for (int i = 0; i < n; i++) {
-		//for (int i = n - 1; i >= 0; i--) {
-			array[i] = newArray[0].get();
-		}
 	}
 
-	newArray->del_all(true);
+
 	delete[] newArray;
 }
 
@@ -136,7 +122,7 @@ std::string array_to_string(T* array, int n, int max, std::string(*data_to_str)(
 void main_ints()
 {
 	srand(0);
-	const int MAX_ORDER = 6;
+	const int MAX_ORDER = 7;
 	const int m = (int)pow(10, 7);
 	for (int o = 1; o <= MAX_ORDER; o++)
 	{
@@ -148,7 +134,7 @@ void main_ints()
 			array1[i] = rand_val;
 		}
 		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
-		std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
+		//std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
 
 
 		int* array2 = new int[n];
@@ -163,7 +149,7 @@ void main_ints()
 
 		double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Counting Sort: " << time << "s" << std::endl;
-		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << "Czas na jeden element: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array1, n, 10, not_str) << std::endl;
 		
 		t1 = clock();	// sortowanie przez kopcowanie ( do wykonania w miejscu )
@@ -173,7 +159,7 @@ void main_ints()
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Heapsort: " << time << "s" << std::endl;
-		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << "Czas na jeden element: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array2, n, 10, not_str) << std::endl;
 
 
@@ -184,7 +170,7 @@ void main_ints()
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Bucket Sort: " << time << "s" << std::endl;
-		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << "Czas na jeden element: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array3, n, 10, not_str) << std::endl;
 
 
@@ -215,7 +201,7 @@ void main_some_objects() {
 			array1[i] = so;
 		}
 		std::cout << "Sortowanie 10^" << o << " liczb" << std::endl;
-		std::cout << array_to_string(array1, n, 10, person_to_str) << std::endl;
+		//std::cout << array_to_string(array1, n, 10, person_to_str) << std::endl;
 
 
 		Person** array2 = new Person * [n];
@@ -228,7 +214,7 @@ void main_some_objects() {
 		clock_t t2 = clock();
 		double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Heapsort: " << time << "s" << std::endl;
-		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << "Czas na jeden element: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array1, n, 10, person_to_str) << std::endl;
 		//std::cout << bh->to_string(person_to_str, 15) << std::endl;
 
@@ -240,7 +226,7 @@ void main_some_objects() {
 
 		time = (t2 - t1) / (double)CLOCKS_PER_SEC;
 		std::cout << "Bucket Sort: " << time << "s" << std::endl;
-		std::cout << "Czas zamortyzowany: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
+		std::cout << "Czas na jeden element: " << (time / n) * 1000 * 1000 * 1000 << " ns" << std::endl;
 		std::cout << array_to_string(array2, n, 10, person_to_str) << std::endl;
 
 
@@ -254,7 +240,7 @@ void main_some_objects() {
 
 int main()
 {
-	main_ints();
-	//main_some_objects();
+	//main_ints();
+	main_some_objects();
 	return 0;
 }
