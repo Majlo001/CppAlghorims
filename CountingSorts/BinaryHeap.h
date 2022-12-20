@@ -106,7 +106,7 @@ private:
         }
         else {
             for (int i = n-1; i >= 0; i--) {
-                heapDown(0, data_cmp);
+                heapDown(i, data_cmp);
             }
         }
         return;

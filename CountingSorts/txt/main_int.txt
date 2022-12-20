@@ -1,0 +1,298 @@
+Sortowanie 10^1 liczb
+Counting Sort: 0.061s
+Czas na jeden element: 6.1e+06 ns
+172437
+1252903
+1819204
+2456212
+2972337
+3136045
+4136605
+5929221
+7421337
+8220376
+
+Heapsort: 0s
+Czas na jeden element: 0 ns
+172437
+1252903
+1819204
+2456212
+2972337
+3136045
+4136605
+5929221
+7421337
+8220376
+
+Bucket Sort: 0s
+Czas na jeden element: 0 ns
+172437
+1252903
+1819204
+2456212
+2972337
+3136045
+4136605
+5929221
+7421337
+8220376
+
+Porownanie: 1 1
+
+Sortowanie 10^2 liczb
+Counting Sort: 0.058s
+Czas na jeden element: 580000 ns
+16476
+41071
+55622
+76903
+144365
+151118
+193927
+212360
+454297
+895567
+
+Heapsort: 0s
+Czas na jeden element: 0 ns
+16476
+41071
+55622
+76903
+144365
+151118
+193927
+212360
+454297
+895567
+
+Bucket Sort: 0s
+Czas na jeden element: 0 ns
+16476
+41071
+55622
+76903
+144365
+151118
+193927
+212360
+454297
+895567
+
+Porownanie: 1 1
+
+Sortowanie 10^3 liczb
+Counting Sort: 0.063s
+Czas na jeden element: 63000 ns
+23445
+24958
+35770
+40112
+44717
+60883
+61451
+62809
+66525
+67359
+
+Heapsort: 0s
+Czas na jeden element: 0 ns
+23445
+24958
+35770
+40112
+44717
+60883
+61451
+62809
+66525
+67359
+
+Bucket Sort: 0.001s
+Czas na jeden element: 1000 ns
+23445
+24958
+35770
+40112
+44717
+60883
+61451
+62809
+66525
+67359
+
+Porownanie: 1 1
+
+Sortowanie 10^4 liczb
+Counting Sort: 0.057s
+Czas na jeden element: 5700 ns
+76
+1671
+2080
+2327
+4433
+5086
+6177
+6641
+6972
+7228
+
+Heapsort: 0.008s
+Czas na jeden element: 800 ns
+76
+1671
+2080
+2327
+4433
+5086
+6177
+6641
+6972
+7228
+
+Bucket Sort: 0.018s
+Czas na jeden element: 1800 ns
+76
+1671
+2080
+2327
+4433
+5086
+6177
+6641
+6972
+7228
+
+Porownanie: 1 1
+
+Sortowanie 10^5 liczb
+Counting Sort: 0.07s
+Czas na jeden element: 700 ns
+13
+66
+108
+286
+415
+433
+473
+508
+572
+596
+
+Heapsort: 0.091s
+Czas na jeden element: 910 ns
+13
+66
+108
+286
+415
+433
+473
+508
+572
+596
+
+Bucket Sort: 0.091s
+Czas na jeden element: 910 ns
+13
+66
+108
+286
+415
+433
+473
+508
+572
+596
+
+Porownanie: 1 1
+
+Sortowanie 10^6 liczb
+Counting Sort: 0.098s
+Czas na jeden element: 98 ns
+0
+6
+43
+52
+79
+86
+88
+89
+92
+93
+
+Heapsort: 1.307s
+Czas na jeden element: 1307 ns
+0
+6
+43
+52
+79
+86
+88
+89
+92
+93
+
+Bucket Sort: 0.834s
+Czas na jeden element: 834 ns
+0
+6
+43
+52
+79
+86
+88
+89
+92
+93
+
+Porownanie: 1 1
+
+Sortowanie 10^7 liczb
+Counting Sort: 0.348s
+Czas na jeden element: 34.8 ns
+0
+1
+2
+4
+6
+6
+7
+8
+8
+9
+
+Heapsort: 17.313s
+Czas na jeden element: 1731.3 ns
+0
+1
+2
+4
+6
+6
+7
+8
+8
+9
+
+Bucket Sort: 10.333s
+Czas na jeden element: 1033.3 ns
+0
+1
+2
+4
+6
+6
+7
+8
+8
+9
+
+Porownanie: 1 1
+
+
+Z:\ZUT_Algorithms2\x64\Debug\CountingSorts.exe (process 11928) exited with code 0.
+To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
+Press any key to close this window . . .

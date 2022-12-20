@@ -1,0 +1,207 @@
+Sortowanie 10^1 liczb
+Heapsort: 0s
+Czas na jeden element: 0 ns
+[Adam Adamiak 0.001268 0]
+[Adam Adamiak 0.091411 8]
+[Adam Adamiak 0.147313 9]
+[Adam Adamiak 0.174129 5]
+[Adam Adamiak 0.193323 1]
+[Adam Adamiak 0.303986 7]
+[Adam Adamiak 0.350308 3]
+[Adam Adamiak 0.585006 2]
+[Adam Adamiak 0.710495 6]
+[Adam Adamiak 0.822838 4]
+
+Bucket Sort: 0s
+Czas na jeden element: 0 ns
+[Adam Adamiak 0.001268 0]
+[Adam Adamiak 0.091411 8]
+[Adam Adamiak 0.147313 9]
+[Adam Adamiak 0.174129 5]
+[Adam Adamiak 0.193323 1]
+[Adam Adamiak 0.303986 7]
+[Adam Adamiak 0.350308 3]
+[Adam Adamiak 0.585006 2]
+[Adam Adamiak 0.710495 6]
+[Adam Adamiak 0.822838 4]
+
+Porownanie: 1
+
+Sortowanie 10^2 liczb
+Heapsort: 0s
+Czas na jeden element: 0 ns
+[Adam Adamiak 0.001619 81]
+[Adam Adamiak 0.008817 22]
+[Adam Adamiak 0.008923 2]
+[Adam Adamiak 0.027496 68]
+[Adam Adamiak 0.057056 7]
+[Adam Adamiak 0.094404 99]
+[Adam Adamiak 0.097523 98]
+[Adam Adamiak 0.109947 74]
+[Adam Adamiak 0.113783 85]
+[Adam Adamiak 0.119080 1]
+
+Bucket Sort: 0s
+Czas na jeden element: 0 ns
+[Adam Adamiak 0.001619 81]
+[Adam Adamiak 0.008817 22]
+[Adam Adamiak 0.008923 2]
+[Adam Adamiak 0.027496 68]
+[Adam Adamiak 0.057056 7]
+[Adam Adamiak 0.094404 99]
+[Adam Adamiak 0.097523 98]
+[Adam Adamiak 0.109947 74]
+[Adam Adamiak 0.113783 85]
+[Adam Adamiak 0.119080 1]
+
+Porownanie: 1
+
+Sortowanie 10^3 liczb
+Heapsort: 0.001s
+Czas na jeden element: 1000 ns
+[Adam Adamiak 0.000658 830]
+[Adam Adamiak 0.000875 277]
+[Adam Adamiak 0.000878 378]
+[Adam Adamiak 0.001784 359]
+[Adam Adamiak 0.002247 623]
+[Adam Adamiak 0.003777 137]
+[Adam Adamiak 0.004285 113]
+[Adam Adamiak 0.004415 893]
+[Adam Adamiak 0.004527 330]
+[Adam Adamiak 0.004856 629]
+
+Bucket Sort: 0s
+Czas na jeden element: 0 ns
+[Adam Adamiak 0.000658 830]
+[Adam Adamiak 0.000875 277]
+[Adam Adamiak 0.000878 378]
+[Adam Adamiak 0.001784 359]
+[Adam Adamiak 0.002247 623]
+[Adam Adamiak 0.003777 137]
+[Adam Adamiak 0.004285 113]
+[Adam Adamiak 0.004415 893]
+[Adam Adamiak 0.004527 330]
+[Adam Adamiak 0.004856 629]
+
+Porownanie: 1
+
+Sortowanie 10^4 liczb
+Heapsort: 0.012s
+Czas na jeden element: 1200 ns
+[Adam Adamiak 0.000048 4818]
+[Adam Adamiak 0.000109 2131]
+[Adam Adamiak 0.000130 2792]
+[Adam Adamiak 0.000372 2095]
+[Adam Adamiak 0.000487 4492]
+[Adam Adamiak 0.000638 5570]
+[Adam Adamiak 0.000711 5770]
+[Adam Adamiak 0.000729 9546]
+[Adam Adamiak 0.000738 2816]
+[Adam Adamiak 0.000752 8329]
+
+Bucket Sort: 0.012s
+Czas na jeden element: 1200 ns
+[Adam Adamiak 0.000048 4818]
+[Adam Adamiak 0.000109 2131]
+[Adam Adamiak 0.000130 2792]
+[Adam Adamiak 0.000372 2095]
+[Adam Adamiak 0.000487 4492]
+[Adam Adamiak 0.000638 5570]
+[Adam Adamiak 0.000711 5770]
+[Adam Adamiak 0.000729 9546]
+[Adam Adamiak 0.000738 2816]
+[Adam Adamiak 0.000752 8329]
+
+Porownanie: 1
+
+Sortowanie 10^5 liczb
+Heapsort: 0.287s
+Czas na jeden element: 2870 ns
+[Adam Adamiak 0.000028 54924]
+[Adam Adamiak 0.000040 31404]
+[Adam Adamiak 0.000051 57125]
+[Adam Adamiak 0.000052 16150]
+[Adam Adamiak 0.000054 42081]
+[Adam Adamiak 0.000058 21879]
+[Adam Adamiak 0.000070 52571]
+[Adam Adamiak 0.000071 69003]
+[Adam Adamiak 0.000079 56403]
+[Adam Adamiak 0.000105 53272]
+
+Bucket Sort: 0.16s
+Czas na jeden element: 1600 ns
+[Adam Adamiak 0.000028 54924]
+[Adam Adamiak 0.000040 31404]
+[Adam Adamiak 0.000051 57125]
+[Adam Adamiak 0.000052 16150]
+[Adam Adamiak 0.000054 42081]
+[Adam Adamiak 0.000058 21879]
+[Adam Adamiak 0.000070 52571]
+[Adam Adamiak 0.000071 69003]
+[Adam Adamiak 0.000079 56403]
+[Adam Adamiak 0.000105 53272]
+
+Porownanie: 1
+
+Sortowanie 10^6 liczb
+Heapsort: 2.734s
+Czas na jeden element: 2734 ns
+[Adam Adamiak 0.000001 359651]
+[Adam Adamiak 0.000001 194227]
+[Adam Adamiak 0.000003 474030]
+[Adam Adamiak 0.000004 96721]
+[Adam Adamiak 0.000004 991543]
+[Adam Adamiak 0.000005 248960]
+[Adam Adamiak 0.000007 907437]
+[Adam Adamiak 0.000007 347176]
+[Adam Adamiak 0.000007 360610]
+[Adam Adamiak 0.000009 212413]
+
+Bucket Sort: 0.975s
+Czas na jeden element: 975 ns
+[Adam Adamiak 0.000001 359651]
+[Adam Adamiak 0.000001 194227]
+[Adam Adamiak 0.000003 474030]
+[Adam Adamiak 0.000004 96721]
+[Adam Adamiak 0.000004 991543]
+[Adam Adamiak 0.000005 248960]
+[Adam Adamiak 0.000007 907437]
+[Adam Adamiak 0.000007 347176]
+[Adam Adamiak 0.000007 360610]
+[Adam Adamiak 0.000009 212413]
+
+Porownanie: 1
+
+Sortowanie 10^7 liczb
+Heapsort: 40.52s
+Czas na jeden element: 4052 ns
+[Adam Adamiak 0.000000 6569481]
+[Adam Adamiak 0.000000 6211632]
+[Adam Adamiak 0.000000 5726850]
+[Adam Adamiak 0.000000 197464]
+[Adam Adamiak 0.000000 4007931]
+[Adam Adamiak 0.000000 8991736]
+[Adam Adamiak 0.000001 6463268]
+[Adam Adamiak 0.000001 9142801]
+[Adam Adamiak 0.000001 7991510]
+[Adam Adamiak 0.000001 3538465]
+
+Bucket Sort: 10.952s
+Czas na jeden element: 1095.2 ns
+[Adam Adamiak 0.000000 6569481]
+[Adam Adamiak 0.000000 6211632]
+[Adam Adamiak 0.000000 5726850]
+[Adam Adamiak 0.000000 197464]
+[Adam Adamiak 0.000000 4007931]
+[Adam Adamiak 0.000000 8991736]
+[Adam Adamiak 0.000001 6463268]
+[Adam Adamiak 0.000001 9142801]
+[Adam Adamiak 0.000001 7991510]
+[Adam Adamiak 0.000001 3538465]
+
+Porownanie: 1
+
+
+Z:\ZUT_Algorithms2\x64\Debug\CountingSorts.exe (process 24852) exited with code 0.
+To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
+Press any key to close this window . . .

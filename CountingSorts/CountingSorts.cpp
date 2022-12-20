@@ -67,8 +67,9 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 	List<T>* newArray = new List<T>[n];
 
 	for (int i = 0; i < n; i++) {
-		const int index = floor(key(array[i]) / w);
+		//const int index = floor(key(array[i]) / w);
 		//const int index = key(array[i]) / w;
+		const int index = array[i]->pesel / w;
 		newArray[index].add_order(array[i], data_cmp);
 	}
 
@@ -86,7 +87,6 @@ void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
 				temp = temp->next;
 			}
 	}
-
 
 	delete[] newArray;
 }
