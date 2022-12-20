@@ -62,14 +62,14 @@ void bucketSort(int* array, int n, const int m) {
 
 
 template<typename T>
-void bucketSort(T* array, int n, double m, int(*key)(T), int(*data_cmp)(T, T)) {
+void bucketSort(T* array, int n, double m, double(*key)(T), int(*data_cmp)(T, T)) {
 	double w = m / (double) n;
 	List<T>* newArray = new List<T>[n];
 
 	for (int i = 0; i < n; i++) {
 		//const int index = floor(key(array[i]) / w);
-		//const int index = key(array[i]) / w;
-		const int index = array[i]->pesel / w;
+		//const int index = array[i]->pesel / w;
+		const int index = key(array[i]) / w;
 		newArray[index].add_order(array[i], data_cmp);
 	}
 

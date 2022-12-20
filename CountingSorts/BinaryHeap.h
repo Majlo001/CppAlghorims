@@ -50,10 +50,10 @@ int person_cmp(Person* p1, Person* p2) {
     else return 1;
 }
 
-int person_key_double(Person p) {
+double person_key_double(Person p) {
     return p.pesel;
 }
-int person_key_double(Person* p) {
+double person_key_double(Person* p) {
     return p->pesel;
 }
 
