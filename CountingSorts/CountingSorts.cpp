@@ -68,7 +68,6 @@ void bucketSort(T* array, int n, double m, double(*key)(T), int(*data_cmp)(T, T)
 
 	for (int i = 0; i < n; i++) {
 		//const int index = floor(key(array[i]) / w);
-		//const int index = array[i]->pesel / w;
 		const int index = key(array[i]) / w;
 		newArray[index].add_order(array[i], data_cmp);
 	}
@@ -177,10 +176,9 @@ void main_ints()
 		bool s1 = arraysEqual(array1, array2, n, normal_cmp);
 		bool s2 = arraysEqual(array2, array3, n, normal_cmp);
 		std::cout << "Porownanie: " << s1 << " " << s2 << std::endl;
-
-
 		std::cout << std::endl;
 
+		delete bh;
 		delete[] array1;
 		delete[] array2;
 		delete[] array3;
@@ -233,6 +231,8 @@ void main_some_objects() {
 		bool s1 = arraysEqual(array1, array2, n, person_cmp);
 		std::cout << "Porownanie: " << s1 << std::endl;
 		std::cout << std::endl;
+
+		delete bh;
 		delete[] array1;
 		delete[] array2;
 	}

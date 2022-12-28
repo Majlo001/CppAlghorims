@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryHeap", "BinaryHeap\Bi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CountingSorts", "CountingSorts\CountingSorts.vcxproj", "{62786C16-EEAD-4C47-B415-6F720FF7CCD4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KruskalUnionFind", "KruskalUnionFind\KruskalUnionFind.vcxproj", "{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{62786C16-EEAD-4C47-B415-6F720FF7CCD4}.Release|x64.Build.0 = Release|x64
 		{62786C16-EEAD-4C47-B415-6F720FF7CCD4}.Release|x86.ActiveCfg = Release|Win32
 		{62786C16-EEAD-4C47-B415-6F720FF7CCD4}.Release|x86.Build.0 = Release|Win32
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Debug|x64.ActiveCfg = Debug|x64
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Debug|x64.Build.0 = Debug|x64
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Debug|x86.ActiveCfg = Debug|Win32
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Debug|x86.Build.0 = Debug|Win32
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x64.ActiveCfg = Release|x64
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x64.Build.0 = Release|x64
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x86.ActiveCfg = Release|Win32
+		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
