@@ -15,6 +15,10 @@ public:
         this->x = x;
         this->y = y;
     }
+    ~Node() {
+        x = 0.0;
+        y = 0.0;
+    }
 };
 
 class Edge {
@@ -26,6 +30,11 @@ public:
         this->x = x;
         this->y = y;
         this->weight = weight;
+    }
+    Edge() {
+        x = 0;
+        y = 0;
+        weight = 0.0;
     }
 };
 
@@ -63,6 +72,13 @@ public:
     Graph() {
         size = 0;
     }
+    ~Graph() {
+        size = 0;
+        nodes->clear();
+        edges->clear();
+        delete nodes;
+        delete edges;
+    }
     Edge** getArray() {
         return edges->getArray();
     }
@@ -95,20 +111,16 @@ public:
             parent[i] = i;
         }
     }
+    ~UnionFind() {
+        size = 0;
+        delete parent;
+        delete rank;
+    }
     int find(int i) {
         if (i == parent[i])
             return i;
         return find(parent[i]);
     }
-    /*int compression_find(int i) {
-        if (i == parent[i])
-            return i;
-
-        int root = find(parent[i]);
-        if (root != parent[i])
-            parent[i] = root;
-        return root;
-    }*/
     int compression_find(int i) {
         if (i == parent[i])
             return i;
@@ -117,8 +129,7 @@ public:
         if (root != parent[i])
             parent[i] = root;
         return root;
-    } // Do przerowbienia jak na kurewskiej wikipedii
-
+    }
     void common_union(int index1, int index2) {
         int xRoot = compression_find(index1);
         int yRoot = compression_find(index2);
@@ -127,22 +138,6 @@ public:
             parent[xRoot] = yRoot;
         }
     }
-    /*void union_by_rank(int index1, int index2) {
-        if (index1 == index2) {
-            return;
-        }
-
-        if (rank[index1] < rank[index2]) {
-            parent[index1] = index2;
-        }
-        else if (rank[index1] > rank[index2]) {
-            parent[index2] = index1;
-        }
-        else if (rank[index1] == rank[index2]) {
-            parent[index2] = index1;
-            rank[index1]++;
-        }
-    }*/
     void union_by_rank(int index1, int index2) {
         int xRoot = compression_find(index1);
         int yRoot = compression_find(index2);
@@ -203,28 +198,74 @@ void bucketSort(T* array, int n, double m, double(*key)(T), int(*data_cmp)(T, T)
     delete[] newArray;
 }
 
-void Kruskal(Graph* graph){
+dynamicArray<Edge*>* Kruskal(Graph* graph){
     int gSize = graph->getSize();
     UnionFind* uf = new UnionFind(gSize);
     dynamicArray<Edge*>* mst = new dynamicArray<Edge*>();
 
     Edge** tempEdge = graph->getArray();
-    bucketSort<Edge*>(tempEdge, gSize, 1.0, edge_key, edge_cmp);
+    double max_time_per_element = 0.0;
 
-    /*for (int i = 0; i < gSize; i++) {
+    std::cout << "Zwykly Kruskall: " << std::endl;
+    clock_t t1 = clock();
+    bucketSort<Edge*>(tempEdge, gSize, 1.0, edge_key, edge_cmp);
+    clock_t t2 = clock();
+    double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << "Czas sortowania: " << time * 1000 << " ms" << std::endl;
+
+    t1 = clock();
+    for (int i = 0; i < gSize; i++) {
         if (uf->find(tempEdge[i]->x) != uf->find(tempEdge[i]->y)) {
             uf->common_union(tempEdge[i]->x, tempEdge[i]->y);
             mst->add(tempEdge[i]);
         }
-    }*/
+    }
+    t2 = clock();
+    time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << "Czas obliczen glownej petli: " << time * 1000 << " ms" << std::endl;
+
+    //std::cout << mst->to_string(edge_to_str) << std::endl;
+
+    delete uf;
+    return mst;
+}
+
+dynamicArray<Edge*>* BetterKruskal(Graph* graph) {
+    int gSize = graph->getSize();
+    UnionFind* uf = new UnionFind(gSize);
+    dynamicArray<Edge*>* mst = new dynamicArray<Edge*>();
+
+    Edge** tempEdge = graph->getArray();
+    double max_time_per_element = 0.0;
+    double weightCount = 0.0;
+
+    std::cout << "Lepszy Kruskall: " << std::endl;
+    clock_t t1 = clock();
+    bucketSort<Edge*>(tempEdge, gSize, 1.0, edge_key, edge_cmp);
+    clock_t t2 = clock();
+    double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << "Czas sortowania: " << time * 1000 << " ms" << std::endl;
+
+    t1 = clock();
     for (int i = 0; i < gSize; i++) {
-        if (uf->find(tempEdge[i]->x) != uf->find(tempEdge[i]->y)) {
+        if (uf->compression_find(tempEdge[i]->x) != uf->compression_find(tempEdge[i]->y)) {
             uf->union_by_rank(tempEdge[i]->x, tempEdge[i]->y);
             mst->add(tempEdge[i]);
         }
     }
-    std::cout << mst->getSize() << std::endl;
-    std::cout << mst->to_string(edge_to_str) << std::endl;
+    t2 = clock();
+    time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << "Czas obliczen glownej petli: " << time * 1000 << " ms" << std::endl;
+
+    for (int i = 0; i < mst->getSize(); i++) {
+        weightCount += mst->get_index(i)->weight;
+    }
+    std::cout << "Krawedzie: " << mst->getSize() + 1 << " suma wag: " << weightCount << std::endl << std::endl;
+
+    //std::cout << mst->to_string(edge_to_str) << std::endl;
+
+    delete uf;
+    return mst;
 }
 
 
@@ -247,7 +288,6 @@ void readFromFile(Graph* graph, std::string filename) {
             output >> x;
             output >> c;
             output >> y;
-            //std::cout << x << " " << y << std::endl;
             graph->addNewNode(x, y);
         }
 
@@ -273,7 +313,6 @@ void readFromFile(Graph* graph, std::string filename) {
             weight = std::stod(temp.substr(0, pos));
             temp.erase(0, pos + 1);
 
-            //::cout << i1 << " " << i2 << " " << weight << std::endl;
             graph->addNewEdge(i1, i2, weight);
             pos = 0;
         }
@@ -285,22 +324,29 @@ void readFromFile(Graph* graph, std::string filename) {
     
 int main()
 {
+    dynamicArray<Edge*>* mst;
+
     Graph* graph1 = new Graph();
     readFromFile(graph1, "g1.txt");
-    Kruskal(graph1);
+    mst = Kruskal(graph1);
+    mst = BetterKruskal(graph1);
+    //std::cout << mst->to_string(edge_to_str) << std::endl;
 
+    Graph* graph2 = new Graph();
+    readFromFile(graph2, "g2.txt");
+    mst = Kruskal(graph2);
+    mst = BetterKruskal(graph2);
+    //std::cout << mst->to_string(edge_to_str) << std::endl;
 
-    /*graph->add(1, 5, 1);
-    graph->add(3, 4, 1);
-    graph->add(2, 5, 2);
-    graph->add(3, 5, 3);
-    graph->add(0, 5, 4);
-    graph->add(2, 3, 4);
-    graph->add(0, 6, 5);
-    graph->add(1, 2, 6);
-    graph->add(3, 6, 8);*/
+    Graph* graph3 = new Graph();
+    readFromFile(graph3, "g3.txt");
+    mst = Kruskal(graph3);
+    mst = BetterKruskal(graph3);
+    //std::cout << mst->to_string(edge_to_str) << std::endl;
 
-
-
+    delete graph1;
+    delete graph2;
+    delete graph3;
+    delete mst;
     return 0;
 }

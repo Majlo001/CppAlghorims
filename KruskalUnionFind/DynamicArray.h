@@ -63,7 +63,7 @@ public:
 
     T get_index(size_t indeks) {
         if (size != 0) {
-            if (indeks < size - 1) {
+            if (indeks < size) {
                 return dArray[indeks];
             }
         }
