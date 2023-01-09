@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CountingSorts", "CountingSo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KruskalUnionFind", "KruskalUnionFind\KruskalUnionFind.vcxproj", "{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GrahamScan", "GrahamScan\GrahamScan.vcxproj", "{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x64.Build.0 = Release|x64
 		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x86.ActiveCfg = Release|Win32
 		{83AE27E8-16B4-41BD-89EB-F1C03FC38F9A}.Release|x86.Build.0 = Release|Win32
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Debug|x64.ActiveCfg = Debug|x64
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Debug|x64.Build.0 = Debug|x64
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Debug|x86.ActiveCfg = Debug|Win32
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Debug|x86.Build.0 = Debug|Win32
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Release|x64.ActiveCfg = Release|x64
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Release|x64.Build.0 = Release|x64
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Release|x86.ActiveCfg = Release|Win32
+		{0C372EF9-C96B-4575-B9BB-FC6523BC9B34}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

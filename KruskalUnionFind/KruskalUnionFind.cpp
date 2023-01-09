@@ -7,6 +7,10 @@
 #include "List.h"
 #include "DynamicArray.h"
 
+int findCounter = 0;
+void resetFindCounter() {
+    findCounter = 0;
+}
 
 class Node {
 public:
@@ -20,7 +24,6 @@ public:
         y = 0.0;
     }
 };
-
 class Edge {
 public:
     int x;
@@ -117,11 +120,13 @@ public:
         delete rank;
     }
     int find(int i) {
+        findCounter++;
         if (i == parent[i])
             return i;
         return find(parent[i]);
     }
     int compression_find(int i) {
+        findCounter++;
         if (i == parent[i])
             return i;
 
@@ -164,21 +169,13 @@ public:
 
 template<typename T>
 void bucketSort(T* array, int n, double m, double(*key)(T), int(*data_cmp)(T, T)) {
-    //double w = m / (double)n;
     List<T>* newArray = new List<T>[n];
 
 
     for (int i = 0; i < n; i++) {
-        //std::cout << key(array[i]) << std::endl;
         int bi = n * key(array[i]);
         newArray[bi].add_order(array[i], data_cmp);
     }
-
-    //for (int i = 0; i < n; i++) {
-    //    //const int index = floor(key(array[i]) / w);
-    //    const int index = key(array[i]) / w;
-    //    newArray[index].add_order(array[i], data_cmp);
-    //}
 
     int index = 0;
     for (int i = 0; i < n; i++) {
@@ -260,7 +257,7 @@ dynamicArray<Edge*>* BetterKruskal(Graph* graph) {
     for (int i = 0; i < mst->getSize(); i++) {
         weightCount += mst->get_index(i)->weight;
     }
-    std::cout << "Krawedzie: " << mst->getSize() + 1 << " suma wag: " << weightCount << std::endl << std::endl;
+    std::cout << "Krawedzie: " << mst->getSize() + 1 << " suma wag: " << weightCount << std::endl;
 
     //std::cout << mst->to_string(edge_to_str) << std::endl;
 
@@ -326,22 +323,39 @@ int main()
 {
     dynamicArray<Edge*>* mst;
 
+    std::cout << "g1.txt" << std::endl;
     Graph* graph1 = new Graph();
     readFromFile(graph1, "g1.txt");
     mst = Kruskal(graph1);
+    std::cout << "Liczba wykonan findow: " << findCounter << std::endl << std::endl;
+    resetFindCounter();
     mst = BetterKruskal(graph1);
+    std::cout << "Liczba wykonan findow: " << findCounter << std::endl << std::endl;
+    resetFindCounter();
     //std::cout << mst->to_string(edge_to_str) << std::endl;
 
+
+    std::cout << "g2.txt" << std::endl;
     Graph* graph2 = new Graph();
     readFromFile(graph2, "g2.txt");
     mst = Kruskal(graph2);
+    std::cout << "Liczba wykonan findow: " << findCounter << std::endl << std::endl;
+    resetFindCounter();
     mst = BetterKruskal(graph2);
+    std::cout << "Liczba wykonan findow: " << findCounter << std::endl << std::endl;
+    resetFindCounter();
     //std::cout << mst->to_string(edge_to_str) << std::endl;
 
+
+    std::cout << "g3.txt" << std::endl;
     Graph* graph3 = new Graph();
     readFromFile(graph3, "g3.txt");
     mst = Kruskal(graph3);
+    std::cout << "Liczba wykonan findow: " << findCounter << std::endl << std::endl;
+    resetFindCounter();
     mst = BetterKruskal(graph3);
+    std::cout << "Liczba wykonan findow: " << findCounter << std::endl << std::endl;
+    resetFindCounter();
     //std::cout << mst->to_string(edge_to_str) << std::endl;
 
     delete graph1;
