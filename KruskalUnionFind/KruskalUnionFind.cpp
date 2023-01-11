@@ -136,26 +136,22 @@ public:
         return root;
     }
     void common_union(int index1, int index2) {
-        int xRoot = compression_find(index1);
-        int yRoot = compression_find(index2);
 
-        if (xRoot != yRoot) {
-            parent[xRoot] = yRoot;
+        if (index1 != index2) {
+            parent[index1] = index2;
         }
     }
     void union_by_rank(int index1, int index2) {
-        int xRoot = compression_find(index1);
-        int yRoot = compression_find(index2);
 
-        if (rank[xRoot] < rank[yRoot]) {
-            parent[xRoot] = yRoot;
+        if (rank[index1] < rank[index2]) {
+            parent[index1] = index2;
         }
-        else if (rank[xRoot] > rank[yRoot]) {
-            parent[yRoot] = xRoot;
+        else if (rank[index1] > rank[index2]) {
+            parent[index2] = index1;
         }
-        else if (xRoot != yRoot) {
-            parent[yRoot] = xRoot;
-            rank[xRoot]++;
+        else if (index1 != index2) {
+            parent[index2] = index1;
+            rank[index1]++;
         }
     }
 
@@ -237,21 +233,21 @@ dynamicArray<Edge*>* BetterKruskal(Graph* graph) {
     double weightCount = 0.0;
 
     std::cout << "Lepszy Kruskall: " << std::endl;
-    clock_t t1 = clock();
+    /*clock_t t1 = clock();
     bucketSort<Edge*>(tempEdge, gSize, 1.0, edge_key, edge_cmp);
     clock_t t2 = clock();
     double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
-    std::cout << "Czas sortowania: " << time * 1000 << " ms" << std::endl;
+    std::cout << "Czas sortowania: " << time * 1000 << " ms" << std::endl;*/
 
-    t1 = clock();
+    clock_t t1 = clock();
     for (int i = 0; i < gSize; i++) {
         if (uf->compression_find(tempEdge[i]->x) != uf->compression_find(tempEdge[i]->y)) {
             uf->union_by_rank(tempEdge[i]->x, tempEdge[i]->y);
             mst->add(tempEdge[i]);
         }
     }
-    t2 = clock();
-    time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    clock_t t2 = clock();
+    double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
     std::cout << "Czas obliczen glownej petli: " << time * 1000 << " ms" << std::endl;
 
     for (int i = 0; i < mst->getSize(); i++) {
