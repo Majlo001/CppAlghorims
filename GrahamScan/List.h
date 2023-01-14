@@ -2,6 +2,14 @@
 
 
 template<typename T>
+std::string not_str(T str) {
+    return std::to_string(str);
+}
+std::string just_str(std::string str) {
+    return str;
+}
+
+template<typename T>
 class ListNode {
 public:
     ListNode<T>* next;
@@ -41,6 +49,9 @@ public:
     }
     ListNode<T>* getHead() {
         return head;
+    }
+    ListNode<T>* getTail() {
+        return tail;
     }
 
     void add(T value) {
@@ -345,56 +356,16 @@ public:
         }
         return 1;
     }
+    bool del_2tolast() {
+        ListNode<T>* stl_object = tail->prev;
+        ListNode<T>* next_object = stl_object->next;
+        ListNode<T>* prev_object = stl_object->prev;
+        prev_object->next = stl_object->next;
+        next_object->prev = stl_object->prev;
 
-    bool remove(std::string key) {
-        ListNode<T>* temp_object = head;
-        if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (temp_object->key == key) {
-                    if (i == 0 && i == size - 1) {
-                        return del_all();
-                    }
-                    else if (i == 0) {
-                        return del_first();
-                    }
-                    else if (i == size - 1) {
-                        return del_last();
-                    }
-                    else {
-                        delete temp_object;
-                        size--;
-                        return true;
-                    }
-                }
-                temp_object = temp_object->next;
-            }
-        }
-        return false;
-    }
-    bool remove(std::string key, bool isIndicator) {
-        ListNode<T>* temp_object = head;
-        if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (temp_object->key == key) {
-                    if (i == 0 && i == size - 1) {
-                        return del_all(isIndicator);
-                    }
-                    else if (i == 0) {
-                        return del_first(isIndicator);
-                    }
-                    else if (i == size - 1) {
-                        return del_last(isIndicator);
-                    }
-                    else {
-                        delete temp_object;
-                        size--;
-                        return true;
-                    }
-                }
-                temp_object = temp_object->next;
-            }
-        }
-        return false;
+        delete stl_object;
+        size--;
+        return 1;
     }
 
     std::string to_string() {

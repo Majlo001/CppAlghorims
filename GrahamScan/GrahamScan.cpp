@@ -5,6 +5,7 @@
 #include <math.h>
 #include <fstream>
 #include "List.h"
+#include "HeapSort.h"
 //#include "DynamicArray.h"
 
 
@@ -23,58 +24,84 @@ public:
         x = 0.0;
         y = 0.0;
     }
-    Point* operator- (Point* p2) { 
-        Point* temp;
-        temp->x = x - p2->x;
-        temp->y = y - p2->y;
+    Point operator- (Point p2) {
+        Point temp;
+        temp.x = x - p2.x;
+        temp.y = y - p2.y;
         return temp;
     };
 };
 
+double cmp(Point p1, Point p2) {
+    return p2.x * p1.y - p1.x * p2.y;
+}
 double cmp(Point* p1, Point* p2) {
     return p2->x * p1->y - p1->x * p2->y;
 }
 
-Point* findMin(List<Point*>* points) {
-    Point* minPoint;
+int point_cmp(Point* p1, Point* p2) {
+    double temp = cmp(p1, p2);
+    if (temp == 0) return 0;
+    else if (temp < 0) return -1;
+    else return 1;
+}
 
-    ListNode<Point*>*temp_object = points->getHead();
-    minPoint = temp_object->value;
 
-    for (int i = 1; i < points->getSize(); i++) {
-        if (minPoint->y < temp_object->value->y) {
-            minPoint = temp_object->value;
+int findMin(Point** points, int n) {
+    int minPoint = 0;
+
+    for (int i = 1; i < n-1; i++) {
+        if (points[minPoint]->y > points[i]->y) {
+            minPoint = i;
         }
-        else if (minPoint->y = temp_object->value->y) {
-            if (minPoint->x < temp_object->value->x) {
-                minPoint = temp_object->value;
+        else if (points[minPoint]->y == points[i]->y) {
+            if (points[minPoint]->x > points[i]->x) {
+                minPoint = i;
             }
         }
-        temp_object = temp_object->next;
     }
 
     return minPoint;
 }
 
-List<int> grahamScan(List<Point*>* points) {
-    List<Point*>* pointscp = new List<Point*>();
-    Point* minPoint;
-    List<Point*>* CH = new List<Point*>();
 
-    ListNode<Point*>* temp_object = points->getHead();
-    for (int i = 0; i < points->getSize(); i++) {
-        pointscp->add(temp_object->value);
-        temp_object = temp_object->next;
+List<int>* grahamScan(Point** points, int n) {
+    int minPoint;
+    List<int>* CH = new List<int>();
+
+    minPoint = findMin(points, n);
+    Point* tmpPoint = points[0];
+    points[0] = points[minPoint];
+    points[minPoint] = tmpPoint;
+
+
+    std::cout << points[0]->x << " " << points[0]->y << std::endl;
+
+    //Sortowanko here
+    //Jakoœ
+
+
+    CH->add(0);
+    CH->add(1);
+
+    for (int i = 2; i < n; i++) {
+        CH->add(i);
+
+
+        while (cmp((*points[CH->getTail()->prev->value] - *points[CH->getTail()->prev->prev->value]) , (*points[CH->getTail()->value] - *points[CH->getTail()->prev->value])) > 0) {
+            CH->del_2tolast();
+
+            if (CH->getSize() < 3) 
+                break;
+        }
     }
 
-    minPoint = findMin(pointscp);
-    CH->add(minPoint);
-
-    return;
+    return CH;
 }
 
 
-void readFromFile(List<Point*>* points, std::string filename) {
+
+Point** readFromFile(Point** points, std::string filename) {
     std::fstream file;
     file.open(filename, std::ios::in);
 
@@ -84,6 +111,7 @@ void readFromFile(List<Point*>* points, std::string filename) {
         std::string temp;
         getline(file, temp);
         int n = std::stoi(temp);
+        points = new Point*[n];
 
         double x, y;
         char c;
@@ -95,17 +123,39 @@ void readFromFile(List<Point*>* points, std::string filename) {
             output >> y;
 
             Point* newPoint = new Point(x, y);
-            points->add(newPoint);
+            //points->add(newPoint);
+            points[i] = newPoint;
+            std::cout << points[i]->x << " " << points[i]->y << std::endl;
         }
 
         file.close();
+        return points;
+    }
+}
+int getN(std::string filename) {
+    std::fstream file;
+    file.open(filename, std::ios::in);
+
+    if (file.is_open())
+    {
+        std::string temp;
+        getline(file, temp);
+        int n = std::stoi(temp);
+
+        file.close();
+        return n;
     }
 }
 
 int main()
 {
-    List<Point*>* points = new List<Point*>();
-    readFromFile(points, "points1.txt");
+    Point** points = nullptr;
+    int n = getN("points1.txt");
+    List<int>* CH;
+
+    points = readFromFile(points, "points1.txt");
+    CH = grahamScan(points, n);
+    std::cout << CH->to_string() << std::endl;
     
     return 0;
 }
