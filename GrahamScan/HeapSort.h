@@ -153,7 +153,22 @@ public:
         return;
     }
 
-
+    std::string to_string() {
+        std::ostringstream os;
+        try {
+            if (size != 0) {
+                for (int i = 0; i < size; i++) {
+                    os << i << ": ";
+                    os << std::to_string(bHeap[i]) << "\n";
+                }
+            }
+            else throw 1;
+        }
+        catch (...) {
+            os << "Brak rekordow!\n";
+        }
+        return os.str();
+    }
     std::string to_string(std::string(*data_to_str)(T)) {
         std::ostringstream os;
         try {

@@ -6,7 +6,6 @@
 #include <fstream>
 #include "List.h"
 #include "HeapSort.h"
-//#include "DynamicArray.h"
 
 
 class Point {
@@ -19,6 +18,10 @@ public:
     Point(double x, double y) {
         this->x = x;
         this->y = y;
+    }
+    Point(const Point& point){
+        x = point.x;
+        y = point.y;
     }
     ~Point() {
         x = 0.0;
@@ -39,11 +42,23 @@ double cmp(Point* p1, Point* p2) {
     return p2->x * p1->y - p1->x * p2->y;
 }
 
-int point_cmp(Point* p1, Point* p2) {
-    double temp = cmp(p1, p2);
+int point_cmp(Point p1, Point p2) {
+    double temp = p2.x * p1.y - p1.x * p2.y;
     if (temp == 0) return 0;
     else if (temp < 0) return -1;
     else return 1;
+}
+int point_cmp(Point* p1, Point* p2) {
+    double temp = p2->x * p1->y - p1->x * p2->y;
+    if (temp == 0) return 0;
+    else if (temp < 0) return -1;
+    else return 1;
+}
+std::string point_to_str(Point* p) {
+    return std::to_string(p->x) + " " + std::to_string(p->y);
+}
+std::string point_to_str(Point p) {
+    return std::to_string(p.x) + " " + std::to_string(p.y);
 }
 
 
@@ -66,36 +81,60 @@ int findMin(Point** points, int n) {
 
 
 List<int>* grahamScan(Point** points, int n) {
-    int minPoint;
     List<int>* CH = new List<int>();
+    int minPoint = findMin(points, n);
 
-    minPoint = findMin(points, n);
-    Point* tmpPoint = points[0];
+    Point** points_copy = new Point*[n];
+    for (int i = 0; i < n; i++) {
+        Point* pcp = new Point(points[i]->x, points[i]->y);
+        pcp->x = pcp->x - points[minPoint]->x;
+        pcp->y = pcp->y - points[minPoint]->y;
+        points_copy[i] = pcp;
+    }
+
+    /*Point* tmpPoint = points[0];
     points[0] = points[minPoint];
-    points[minPoint] = tmpPoint;
-
-
+    points[minPoint] = tmpPoint;*/
     std::cout << points[0]->x << " " << points[0]->y << std::endl;
+    std::cout << points_copy[0]->x << " " << points_copy[0]->y << std::endl;
+
 
     //Sortowanko here
-    //Jakoœ
+    BinaryHeap<Point*>* bh = new BinaryHeap<Point*>(points_copy, n, point_cmp, true);
+    bh->sort(point_cmp);
+    std::cout << std::endl << std::endl << "BH:" << std::endl;
+    std::cout << bh->to_string(point_to_str) << std::endl;
 
 
     CH->add(0);
     CH->add(1);
 
     for (int i = 2; i < n; i++) {
-        CH->add(i);
+        if (minPoint != i) {
+            CH->add(i);
 
+            while (cmp((*points_copy[CH->getTail()->prev->value] - *points_copy[CH->getTail()->prev->prev->value]), (*points_copy[CH->getTail()->value] - *points_copy[CH->getTail()->prev->value])) > 0) {
+                CH->del_2tolast();
 
-        while (cmp((*points[CH->getTail()->prev->value] - *points[CH->getTail()->prev->prev->value]) , (*points[CH->getTail()->value] - *points[CH->getTail()->prev->value])) > 0) {
-            CH->del_2tolast();
-
-            if (CH->getSize() < 3) 
-                break;
+                if (CH->getSize() < 3)
+                    break;
+            }
         }
     }
+    CH->add_order(minPoint-1);
 
+
+    for (int i = 0; i < n; i++) {
+        points_copy[i]->x = points_copy[i]->x + points[minPoint]->x;
+        points_copy[i]->y = points_copy[i]->y + points[minPoint]->y;
+    }
+    ListNode<int>* temp = CH->getHead();
+    for (int i = 0; i < CH->getSize(); i++) {
+        std::cout << points_copy[temp->value]->x << " " << points_copy[temp->value]->y << std::endl;
+        temp = temp->next;
+    }
+
+    delete[] points_copy;
     return CH;
 }
 
@@ -150,10 +189,12 @@ int getN(std::string filename) {
 int main()
 {
     Point** points = nullptr;
-    int n = getN("points1.txt");
+    //int n = getN("points1.txt");
+    int n = getN("test2.txt");
     List<int>* CH;
 
-    points = readFromFile(points, "points1.txt");
+    //points = readFromFile(points, "points1.txt");
+    points = readFromFile(points, "test2.txt");
     CH = grahamScan(points, n);
     std::cout << CH->to_string() << std::endl;
     
