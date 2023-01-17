@@ -1,0 +1,22 @@
+﻿  GrahamScan.cpp
+Z:\ZUT_Algorithms2\GrahamScan\HeapSort.h(121,15): warning C4101: 'temp': unreferenced local variable
+Z:\ZUT_Algorithms2\GrahamScan\HeapSort.h(119): message : while compiling class template member function 'void BinaryHeap<Point *>::heapUp(int,int (__cdecl *)(T,T))'
+          with
+          [
+              T=Point *
+          ]
+Z:\ZUT_Algorithms2\GrahamScan\HeapSort.h(35): message : see reference to function template instantiation 'void BinaryHeap<Point *>::heapUp(int,int (__cdecl *)(T,T))' being compiled
+          with
+          [
+              T=Point *
+          ]
+Z:\ZUT_Algorithms2\GrahamScan\GrahamScan.cpp(111): message : see reference to class template instantiation 'BinaryHeap<Point *>' being compiled
+Z:\ZUT_Algorithms2\GrahamScan\HeapSort.h(18,21): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+Z:\ZUT_Algorithms2\GrahamScan\HeapSort.h(17): message : while compiling class template member function 'int BinaryHeap<Point *>::getParent(int)'
+Z:\ZUT_Algorithms2\GrahamScan\HeapSort.h(122): message : see reference to function template instantiation 'int BinaryHeap<Point *>::getParent(int)' being compiled
+  Generating code
+  3 of 284 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  GrahamScan.vcxproj -> Z:\ZUT_Algorithms2\x64\Release\GrahamScan.exe
