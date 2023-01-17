@@ -111,43 +111,45 @@ List<int>* grahamScan(Point** points, int n) {
     }
 
 
-    //Sortowanko here
+    clock_t t1 = clock();
     BinaryHeap<Point*>* bh = new BinaryHeap<Point*>(points_copy, n, point_cmp, true);
     bh->sort(point_cmp);
-    //std::cout << std::endl << std::endl << "BH:" << std::endl;
-    //std::cout << bh->to_string(point_to_str) << std::endl;
+    clock_t t2 = clock();
+    double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << "Czas obliczen sortowania: " << time * 1000 << " ms" << std::endl;
 
+    //std::cout << bh->to_string(point_to_str) << std::endl;
     /*for (int i = 0; i < n; i++) {
         points_copy[i]->x = points_copy[i]->x + points[minPoint]->x;
         points_copy[i]->y = points_copy[i]->y + points[minPoint]->y;
+        std::cout << points_copy[i]->x << " " << points_copy[i]->y << std::endl;
     }*/
 
 
+
+    t1 = clock();
     CH->add(points_copy[0]->id);
     CH->add(points_copy[1]->id);
 
     for (int i = 2; i < n; i++) {
-            CH->add(points_copy[i]->id);
+        CH->add(points_copy[i]->id);
 
-            while (cmp((*points[CH->getTail()->prev->value] - *points[CH->getTail()->prev->prev->value]), (*points[CH->getTail()->value] - *points[CH->getTail()->prev->value])) > 0) {
-                CH->del_2tolast();
+        while (cmp((*points[CH->getTail()->prev->value] - *points[CH->getTail()->prev->prev->value]), (*points[CH->getTail()->value] - *points[CH->getTail()->prev->value])) > 0) {
+            CH->del_2tolast();
 
-                if (CH->getSize() < 3)
-                    break;
-            }
+            if (CH->getSize() < 3)
+                break;
+        }
     }
+    t2 = clock();
+    time = (t2 - t1) / (double)CLOCKS_PER_SEC;
+    std::cout << "Czas obliczen glownej petli: " << time * 1000 << " ms" << std::endl;
 
 
-    ListNode<int>* temp = CH->getHead();
-    for (int i = 0; i < CH->getSize(); i++) {
-        //std::cout << points_copy[temp->value]->x << " " << points_copy[temp->value]->y << std::endl;
-        temp = temp->next;
-    }
-
+    delete bh;
     delete[] points_copy;
     return CH;
 }
-
 
 
 Point** readFromFile(Point** points, std::string filename) {
@@ -173,7 +175,6 @@ Point** readFromFile(Point** points, std::string filename) {
 
             Point* newPoint = new Point(x, y);
             points[i] = newPoint;
-            //std::cout << points[i]->x << " " << points[i]->y << std::endl;
         }
 
         file.close();
@@ -195,17 +196,61 @@ int getN(std::string filename) {
     }
 }
 
+
+
 int main()
 {
     Point** points = nullptr;
-    int n = getN("points2.txt");
-    //int n = getN("test2.txt");
     List<int>* CH;
+    int n;
 
-    points = readFromFile(points, "points2.txt");
-    //points = readFromFile(points, "test2.txt");
+
+    std::cout << "Points 1" << std::endl;
+    n = getN("points1.txt");
+    std::cout << "Liczba punktow: "<< n << std::endl;
+    points = readFromFile(points, "points1.txt");
     CH = grahamScan(points, n);
-    std::cout << CH->to_string() << std::endl;
+    std::cout << CH->to_string() << std::endl << std::endl << std::endl;
+    CH->del_all();
+
+
+    std::cout << "Points 2" << std::endl;
+    n = getN("points2.txt");
+    std::cout << "Liczba punktow: " << n << std::endl;
+    points = readFromFile(points, "points2.txt");
+    CH = grahamScan(points, n);
+    std::cout << CH->to_string() << std::endl << std::endl << std::endl;
+    CH->del_all();
+
+
+    std::cout << "Points 3" << std::endl;
+    n = getN("points3.txt");
+    std::cout << "Liczba punktow: " << n << std::endl;
+    points = readFromFile(points, "points3.txt");
+    CH = grahamScan(points, n);
+    std::cout << CH->to_string() << std::endl << std::endl << std::endl;
+    CH->del_all();
+
+
+    std::cout << "Points 4" << std::endl;
+    n = getN("points4.txt");
+    std::cout << "Liczba punktow: " << n << std::endl;
+    points = readFromFile(points, "points4.txt");
+    CH = grahamScan(points, n);
+    std::cout << CH->to_string() << std::endl << std::endl << std::endl;
+    CH->del_all();
+
+
+    std::cout << "Points 5" << std::endl;
+    n = getN("points5.txt");
+    std::cout << "Liczba punktow: " << n << std::endl;
+    points = readFromFile(points, "points5.txt");
+    CH = grahamScan(points, n);
+    std::cout << CH->to_string() << std::endl << std::endl << std::endl;
+    CH->del_all();
     
+
+    delete CH;
+    delete[] points;
     return 0;
 }
