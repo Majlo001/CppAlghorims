@@ -61,14 +61,7 @@ int point_cmp(Point p1, Point p2) {
 }
 int point_cmp(Point* p1, Point* p2) {
     double temp = p2->x * p1->y - p1->x * p2->y;
-    if (p1->x + p1->y == 0) return -1;
-    if (p2->x + p2->y == 0) return 1;
-    if (temp == 0) {
-        if (p1 > p2) return 1;
-        else if (p1 < p2) return -1;
-        else return 0;
-        return 0;
-    }
+    if (temp == 0) return 0;
     else if (temp < 0) return -1;
     else return 1;
 }
@@ -102,17 +95,22 @@ List<int>* grahamScan(Point** points, int n) {
     List<int>* CH = new List<int>();
     int minPoint = findMin(points, n);
 
-    Point** points_copy = new Point*[n];
-    for (int i = 0; i < n; i++) {
+    Point** points_copy = new Point*[n - 1];
+    int k = 0;
+    for (int i = 0; i < n; i++, k++) {
         Point* pcp = new Point(points[i]->x, points[i]->y, i);
         pcp->x = pcp->x - points[minPoint]->x;
         pcp->y = pcp->y - points[minPoint]->y;
-        points_copy[i] = pcp;
+        if (i == minPoint)
+        {
+            k--;
+            continue;
+        }
+        points_copy[k] = pcp;
     }
 
-
     clock_t t1 = clock();
-    BinaryHeap<Point*>* bh = new BinaryHeap<Point*>(points_copy, n, point_cmp, true);
+    BinaryHeap<Point*>* bh = new BinaryHeap<Point*>(points_copy, n-1, point_cmp, true);
     bh->sort(point_cmp);
     clock_t t2 = clock();
     double time = (t2 - t1) / (double)CLOCKS_PER_SEC;
@@ -128,17 +126,14 @@ List<int>* grahamScan(Point** points, int n) {
 
 
     t1 = clock();
+    CH->add(minPoint);
     CH->add(points_copy[0]->id);
-    CH->add(points_copy[1]->id);
 
-    for (int i = 2; i < n; i++) {
+    for (int i = 1; i < n - 1; i++) {
         CH->add(points_copy[i]->id);
 
         while (cmp((*points[CH->getTail()->prev->value] - *points[CH->getTail()->prev->prev->value]), (*points[CH->getTail()->value] - *points[CH->getTail()->prev->value])) > 0) {
             CH->del_2tolast();
-
-            if (CH->getSize() < 3)
-                break;
         }
     }
     t2 = clock();
@@ -162,17 +157,27 @@ Point** readFromFile(Point** points, std::string filename) {
         std::string temp;
         getline(file, temp);
         int n = std::stoi(temp);
-        points = new Point*[n];
+        points = new Point * [n];
 
         double x, y;
-        char c;
+        std::string delimiter = " ";
+        std::string token;
+        
         for (int i = 0; i < n; i++) {
             getline(file, temp);
-            std::istringstream output(temp);
-            output >> x;
-            output >> c;
-            output >> y;
 
+            int pos = 0;
+            pos = temp.find(delimiter);
+            token = temp.substr(0, pos);
+            x = std::stod(token);
+            temp.erase(0, pos + delimiter.length());
+
+            pos = temp.find(delimiter);
+            token = temp.substr(0, pos);
+            y = std::stod(token);
+            temp.erase(0, pos + delimiter.length());
+
+            //std::cout << i << ": " << x << " " << y << std::endl;
             Point* newPoint = new Point(x, y);
             points[i] = newPoint;
         }
@@ -180,6 +185,7 @@ Point** readFromFile(Point** points, std::string filename) {
         file.close();
         return points;
     }
+
 }
 int getN(std::string filename) {
     std::fstream file;
@@ -210,6 +216,7 @@ int main()
     std::cout << "Liczba punktow: "<< n << std::endl;
     points = readFromFile(points, "points1.txt");
     CH = grahamScan(points, n);
+    std::cout << CH->getSize() << std::endl;
     std::cout << CH->to_string() << std::endl << std::endl << std::endl;
     CH->del_all();
 
@@ -219,6 +226,7 @@ int main()
     std::cout << "Liczba punktow: " << n << std::endl;
     points = readFromFile(points, "points2.txt");
     CH = grahamScan(points, n);
+    std::cout << CH->getSize() << std::endl;
     std::cout << CH->to_string() << std::endl << std::endl << std::endl;
     CH->del_all();
 
@@ -228,6 +236,7 @@ int main()
     std::cout << "Liczba punktow: " << n << std::endl;
     points = readFromFile(points, "points3.txt");
     CH = grahamScan(points, n);
+    std::cout << CH->getSize() << std::endl;
     std::cout << CH->to_string() << std::endl << std::endl << std::endl;
     CH->del_all();
 
@@ -237,6 +246,7 @@ int main()
     std::cout << "Liczba punktow: " << n << std::endl;
     points = readFromFile(points, "points4.txt");
     CH = grahamScan(points, n);
+    std::cout << CH->getSize() << std::endl;
     std::cout << CH->to_string() << std::endl << std::endl << std::endl;
     CH->del_all();
 
@@ -246,6 +256,7 @@ int main()
     std::cout << "Liczba punktow: " << n << std::endl;
     points = readFromFile(points, "points5.txt");
     CH = grahamScan(points, n);
+    std::cout << CH->getSize() << std::endl;
     std::cout << CH->to_string() << std::endl << std::endl << std::endl;
     CH->del_all();
     
