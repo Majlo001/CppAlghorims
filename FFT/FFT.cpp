@@ -1,9 +1,9 @@
-﻿#include <iostream>
+﻿#define _USE_MATH_DEFINES
+#include <cmath>
+#include <iostream>
 #include <string>
 #include <time.h>
 #include <sstream>
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <fstream>
 #include <complex>
 
@@ -31,9 +31,9 @@ std::complex<double>* fft(double* f, int N) {
 	Ecomplex = fft(even, newN);
 	Ocomplex = fft(odd, newN);
 
-	for (int k = 0; k < newN-1; k++) {
+	for (int k = 0; k < newN; k++) {
 		c[k] = Ecomplex[k] + std::polar(1.0, -2 * M_PI * k/N) * Ocomplex[k];
-		c[k+newN] = ;
+		c[k+newN] = Ecomplex[k] - std::polar(1.0, -2 * M_PI * k/N) * Ocomplex[k];
 	}
 
 	delete[] Ecomplex;
@@ -44,23 +44,32 @@ std::complex<double>* fft(double* f, int N) {
 }
 
 std::complex<double>* dft(double* f, int N) {
+	std::complex<double>* c = new std::complex<double>[N];
 
+
+	for (int i = 0; i < N; i++) {
+		for (int k = 0; k < N; k++) {
+			//TODO sth here
+		}
+	}
+
+	return c;
 }
 
 
 
 int main() {
 	//const int MAX_ORDER = 13;
-	const int MAX_ORDER = 2;
-	const bool PRINT_COEFS = false;
+	const int MAX_ORDER = 4;
+	const bool PRINT_COEFS = true;
 	for (int o = 1; o <= MAX_ORDER; o++)
 	{
-		const int N = 1 << o; // rozmiar problemu ( potega dwojki - przesuniecie bitowe w lewo )
+		const int N = 1 << o;
 		printf("N: %i \n", N);
 
 		double* f = new double[N];
 		for (int n = 0; n < N; n++)
-			f[n] = n / (double)N; // przykladowe dane ( tu akurat : probki funkcji liniowej )
+			f[n] = n / (double)N; // probki funkcji liniowej
 
 		clock_t t1 = clock();
 		//std::complex<double>* cDFT = dft(f, N);
@@ -73,14 +82,14 @@ int main() {
 		std::complex<double>* cFFT = fft(f, N);
 		t2 = clock();
 		double fft_time = (t2 - t1) / (double)CLOCKS_PER_SEC * 1000.0;
+		printf("FFT time[ms] : % f \n", fft_time);
 
-
-		//printf("FFT time[ms] : % f \n", fft_time);
 		//printf("mean error : % f \n", err(cDFT, cFFT, N));
-		//if (PRINT_COEFS)
-		//	for (int k = 0; k < N; k++)
-		//		... // wypis na ekran wspolczynnikow obu transformat ( czesci rzeczywiste i urojone )
-		//		printf("−−−−−\n", N);
+		if (PRINT_COEFS) {
+			for (int k = 0; k < N; k++)
+				std::cout << k << ": " << cFFT[k].real() << " " << cFFT[k].imag() << std::endl;
+			std::cout << "----\n" << std::endl;
+		}
 		delete[] f;
 		//delete[] cDFT;
 		delete[] cFFT;
