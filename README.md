@@ -1,2 +1,2 @@
-# ZUT_Algorithms2
+# Well known alghoritms made in C++
  
